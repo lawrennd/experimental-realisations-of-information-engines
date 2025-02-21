@@ -1,0 +1,1782 @@
+
+\documentclass[aps, twocolumn,floatfix,showpacs, superscriptaddress]{revtex4-2}
+%\documentclass[doublecol]{epl2} 
+
+\usepackage{amssymb,amsmath,amsfonts}
+\usepackage{graphicx,graphics}
+\usepackage{epsfig}
+\usepackage{epstopdf}
+\usepackage{amsfonts}
+\usepackage{bm,bbm}
+\usepackage{amssymb,amsmath,amsfonts}
+\usepackage{mathrsfs}
+\usepackage{calc}
+\usepackage{epsfig}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{epstopdf}
+\usepackage{bm,amssymb,amsmath}
+\usepackage{graphicx,color}
+\newcommand{\m}{\hspace*{-0.50mm}}
+\newcommand{\n}{\hspace*{-0.25mm}}
+\usepackage{ulem}
+\usepackage{xspace}
+\newcommand{\gpt}[1]{{\color{green}{#1}}}
+\newcommand{\remi}[1]{{\color{teal}{#1}}}
+\newcommand{\laura}[1]{{\color{purple}{#1}}}
+\newcommand{\omer}[1]{{\color{olive}{#1}}}
+\newcommand{\yael}[1]{{\color{violet}{#1}}}
+	
+\newcommand{\ie}{information engines }
+\newcommand{\Ie}{Information engines }
+\newcommand{\IE}{Information Engines }
+\newcommand{\se}{Szil\'ard engine }
+\newcommand{\s}{Szil\'ard }
+\begin{document}
+
+
+\title{Experimental Realizations of Information Engines: Beyond Proof of Concept}
+\author{R\'emi Goerlich}
+\affiliation{Raymond \& Beverly Sackler School of Physics and Astronomy, Tel Aviv University, Tel Aviv 6997801, Israel}
+\author{Laura Hoek}
+\affiliation{Raymond \& Beverly Sackler School of Chemistry, Tel Aviv University, Tel Aviv 6997801, Israel}
+\author{Omer Chor}
+\affiliation{Department of Physics of Complex Systems, Weizmann Institute of Science, Rehovot 7610001, Israel}
+\author{Saar Rahav}
+\affiliation{Schulich Faculty of Chemistry, Technion--Israel Institute of Technology, Haifa 3200008, Israel}
+\author{Yael Roichman}
+\email{roichman@tauex.tau.ac.il}
+\affiliation{Raymond \& Beverly Sackler School of Physics and Astronomy, Tel Aviv University, Tel Aviv 6997801, Israel}
+\affiliation{Raymond \& Beverly Sackler School of Chemistry, Tel Aviv University, Tel Aviv 6997801, Israel}
+
+
+\date{\today}
+\begin{abstract}
+    Gathering information about a system enables greater control over it. This principle lies at the core of information engines, which use measurement-based feedback to rectify thermal noise and convert information into work. Originating from Maxwell's and Szilárd's thought experiments, the thermodynamics of information engines has steadily advanced, with recent experimental realizations both confirming established results and pushing the field forward. Coupled with technological advances and developments in nonequilibrium thermodynamics, novel implementations of information engines continue to challenge theoretical understanding. In this perspective, we discuss recent progress and highlight new opportunities, such as applying information engines to active, many-body, and inertial systems, and leveraging tools like optimal control to design their driving protocols.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+Information is now widely acknowledged as a measurable physical quantity with thermodynamic implications. This notion was initially introduced in a thought experiment designed by James C. Maxwell in 1867 \cite{maxwell1871theory}. Maxwell proposed that if it is possible to observe an isolated system, gather information about its state, and subsequently take actions based on the acquired information, it allows for the reduction of the total entropy of the system, seemingly defying the Second Law of Thermodynamics.
+Taking it a step further, Leo Szil\'ard, in 1929, proposed a refined design that directly converts information gained through measurement into extracted energy, creating an engine that operates using a single heat bath \cite{szilard1929entropieverminderung, szilard1964decrease}. Thus, Szil\'ard's \textit{information engine} appears to challenge the fundamental principle governing heat engines, which states that they can operate only between two heat reservoirs at different temperatures.
+
+From Maxwell and Szil\'ard to its later refined versions, the various models of \ie can be understood by information thermodynamics and, more generally, non-equilibrium statistical mechanics \cite{Parrondo_2015, lutz_information_2015, paneru_colloidal_2020}.
+Within this unifying framework, information forms a thermodynamic resource. When information is gathered, it drives the system out of equilibrium, creating a state from which energy can be extracted. This led to an extension of the Second Law of Thermodynamics to account for the role of information in processes involving measurement and feedback \cite{sagawa_generalized_2010, esposito_second_2011, ashida_general_2014}. Nowadays, the operational cycle of information engines applied to thermal systems is well understood from a thermodynamic perspective \cite{lutz_information_2015}.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale = 0.17]{Schema.png}
+    \caption{The operational sequence of a phase space splitting (on the left) and a conditional, phase-space contracting (on the right) information engine is as follows: The cyclic operation begins at some initial state of the system (a). The system's micro-state is measured, and suitable feedback is applied (b). Subsequently, the system is allowed to relax (c), followed by the erasure of the measurement outcome, returning the system to a different but equivalent initial state (a).}
+    \label{fig:IEs_sketch}
+\end{figure}
+
+More precisely, the action sequence of \ie can vary in its details, but it always involves the following steps depicted in Fig.~\ref{fig:IEs_sketch}: (a) measuring the state of a system, (b) making a decision based on the measurement as to which feedback should be applied to it, if any. (c) Allowing the system to respond to the applied feedback and, in doing so, extracting energy. Finally, if one wants to bring both the engine and the measurement apparatus back to their initial state, (d) erasing the measurement outcome \footnote{In many experimental realizations \cite{sagawa_generalized_2010, admon_experimental_2018, saha2021maximizing}, the measurement-feedback scheme allows to store potential energy, which is not necessarily extracted, which also releases the constrain of erasing the memory.}.
+
+The increasing experimental control over fluctuating systems enabled the physical realization of information engines.
+Such engines were realized on a microscopic scale using colloidal suspensions \cite{toyabe_experimental_2010, roldan_universal_2014, paneru_lossless_2018}, nanoscale solid-state structures \cite{koski_experimental_2014, chida_power_2017}, and DNA \cite{Ribezzi_Crivellari_2019}. On the macroscopic scale, granular gas \cite{lagoin_human-scale_2022} and self-propelled bristle robots \cite{Chor2023} were used.
+Early experimental studies of information engines primarily sought to demonstrate the fundamental relationship between information and thermodynamics. Subsequent realizations focused on enhancing the output power or the efficiency of information engines, leveraging increasingly precise control mechanisms \cite{ashida_general_2014, paneru_optimal_2018, lucero_maximal_2021, saha2021maximizing, saha_bayesian_2022}. More recently, experiments with information engines have aimed to push the field in new directions.
+This arise from the parallel development of stochastic thermodynamics on heat engines \cite{martinez2017colloidal}, active matter \cite{ramaswamy2003active, fodor2021active}, fluctuation theorems \cite{seifert2012stochastic, ciliberto2017experiments}, and optimal control \cite{schmiedl2007optimal, rosales2020optimal, pires2023optimal}. Emerging experimental concerns have also posed new theoretical challenges, such as addressing finite-size effects, particularly critical in systems involving active matter \cite{elgeti2015physics, krishnamurthy2016micrometre, solon2015pressure}, and managing finite-time operations, which demand the development of new thermodynamic optimization principles \cite{ParkOptimal2016, davis2024active}.
+
+These observations motivate this perspective, in which we review the most salient aspects of experimental realizations of information engines and highlight the current evolution of this field [Sec.~\ref{Sec:Experimental}].
+We emphasize new directions related to non-equilibrium working substance, many-body effects, inertia, and optimal control with finite resources [Sec.~\ref{Sec:NewHorizons}].
+While various processes and phenomena can be cast into the information engine formalism \footnote{This includes Brownian ratchets \cite{reimann2002brownian}, autonomous systems, diode-like systems \cite{raizen_comprehensive_2009} or even apparently unrelated stochastic processes \cite{goerlich2023experimental, fuchs2016stochastic}. All are able to rectify fluctuations and can therefore be described using the \ie formalism. The current perspective keeps a more restricted scope.}, this perspective centers on \ie with explicit experimental realizations of feedback loops \cite{toyabe_experimental_2010, roldan_universal_2014,  paneru_lossless_2018, lee_experimentally-achieved_2018, Ribezzi_Crivellari_2019, paneru_efficiency_2020, saha2021maximizing, saha2023information, archambault2024inertial, archambault2024first}.
+
+\section{Modern \IE}
+\label{Sec:Experimental}
+
+\subsection{Two Classes of Information Engines}
+
+Szil\'ard's engine is a paradigmatic information engine in which each measurement splits the phase-space into two parts, and feedback is systematically applied. Its operation sequence is depicted in Fig.~\ref{fig:IEs_sketch}, on the left. The engine is comprised of an ideal gas molecule in a chamber in contact with a heat reservoir (Fig.~\ref{fig:IEs_sketch}a, left). After each measurement, a partition is inserted into the chamber, splitting it into two (Fig.~\ref{fig:IEs_sketch}b, left). A measurement is used to determine in which half the molecule resides, thereby updating the state of the system. A mass is connected to the partition, on the side populated by the molecule. The gas is then allowed to expand isothermally, performing work by lifting the mass (Fig.~\ref{fig:IEs_sketch}c, left). Finally, the mass is detached from the partition, the measurement outcome is erased, and the system returns to its original state (Fig.~\ref{fig:IEs_sketch}d, left).
+Engines of the Szil\'ard type, namely phase-splitting \ie have been realized using various microscopic systems \cite{koski_experimental_2014, roldan_universal_2014, Ribezzi_Crivellari_2019}, and recently also macroscopic systems \cite{Chor2023}.
+
+In a second class of \ie a condition set on the measurement outcome determines whether feedback should be applied.
+More precisely, feedback is applied only when it is beneficial for the extraction of energy.
+An example of a conditional information engine is shown in Fig.~\ref{fig:IEs_sketch} (right). A repelling optical force (a wall) prevents a diffusing particle from going down a linear potential. If, when measured, the particle is further up than a given threshold distance $\Delta x$ from the repelling wall (Fig.~\ref{fig:IEs_sketch}b (rightmost panel)), the wall is moved closer to the particle, confining it into a smaller region of phase space. Thus, the average position of the particle increases against the potential's slope, without applying direct work. Conditional \ie have been realized in various optical tweezers set-ups \cite{admon_experimental_2018, paneru_lossless_2018, lee_experimentally-achieved_2018, saha2021maximizing, saha2023information} including the first realization \cite{toyabe_experimental_2010}.
+
+Szil\'ard's engines convert all measurement outcomes into mechanical work while conditional \ie are storing potential energy thanks to selected measurement outcomes. 
+Such classification is open to debate \footnote{in terms of phase-space manipulation, compressing phase-space into a smaller region can be viewed as an extreme case of Szil\'ard-like splitting, both schemes sharing some similarities. More crucial is the fact that measurements are selected in the case of conditional engine} yet we argue that categorizing them separately reveals crucial insights. This distinction hinges on two key factors: the type of phase-space manipulation and the nature of the feedback timing, leading to very different maximal work extraction per measurement.
+
+
+
+\subsection{Thermodynamics of \IE}
+\label{Sec:Thermo}
+
+The Second Law of Thermodynamics bounds energy exchanges.
+The average work $\Delta W$ needed to perform an isothermal transformation between equilibrium states $\rho_{\rm eq}$ is bounded by free energy
+\begin{equation}
+    \Delta W \geq \Delta F = \Delta E - T \Delta S,
+    \label{eq:EqSecondLaw}
+\end{equation}
+where $\Delta E$ is the average energy difference between initial and final states and $\Delta S$ the associated entropy difference $S$, defined as $S(\rho) = -k_B \int \rho \ln \rho ~dx$ \cite{Seifert2005}.
+We introduced here the Second Law on averaged quantities, yet work, heat, and entropy are all well defined at the level of single fluctuating trajectories, by stochastic thermodynamics \cite{Sekimoto1998, SekimotoBook, seifert2012stochastic}.
+Eq.~(\ref{eq:EqSecondLaw}) is the consequence of Jarzynski equality relating the fluctuations of the stochastic work $\Delta w$ to the free-energy as $\langle e^{-(\Delta w-\Delta F)/k_B T} \rangle = 1$ \cite{Jarzynski1997}.
+The Second Law also constrains the operation of information engines, but it must be refined with respect to Eq~(\ref{eq:EqSecondLaw}) to describe the use of information properly.
+In a seminal work, Sagawa and Ueda derived a Second Law-like inequality for information engines \cite{sagawa_generalized_2010}.
+Following the operation steps of a Szil\'ard engine clearly illustrates this generalization.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale = 0.24]{Szilard.png}
+    \caption{The first steps of operation of a \se from a thermodynamic point of view. (a) initially at equilibrium, the position of the particle is unknown. Its probability density $\rho(x)$ (blue line) spans uniformly the whole available volume. As such, it corresponds to the equilibrium Boltzmann distribution $\rho_{\rm eq}$. (b) a binary measurement collapses $\rho(x)$ in one half of the box. The post-measurement distribution now differs from the equilibrium solution, revealed by a positive information.
+    (c) Inserting a partition reduced the available volume, and the post-measurement $\rho(x)$ corresponds to equilibrium again \cite{Parrondo_2015}. The engine is then quasistatically expanded, and the whole operation remains reversible, extracting $W^{\rm out}_{\rm rev} = k_B T \ln(2)$.}
+    \label{fig:Szilard}
+\end{figure}
+Initially at thermal equilibrium (see Fig.~\ref{fig:Szilard} (a)), the probability distribution of the particle's position $\rho_{\rm eq}$ is uniform in the box.
+After applying a measurement with a binary outcome (left or right), the probability distribution $\rho$ becomes non-zero only in one half of the box.
+$\rho$ is therefore a non-equilibrium state with lower entropy, obtained by acquiring information about the system (Fig.~\ref{fig:Szilard} (b), right panel).
+The generalization of the Second Law Eq.~(\ref{eq:EqSecondLaw}) accounting for a non-equilibrium initial state reads \cite{esposito_second_2011}
+\begin{equation}
+    \Delta W \geq \Delta F - k_B T I.
+    \label{eq:NeqSecondLaw}
+\end{equation}
+$I$ quantifies the information acquired by the measurements as $I = \sum_{m} p(m) \mathcal{D}_{\rm KL}(\rho(x|m) | \rho_{\rm eq})$ where $p(m)$ is the probability of a measurement outcome $m$ (such as the particle being measured in a certain region of the box).
+$\mathcal{D}_{\rm KL}(\rho(x|m) | \rho_{\rm eq}) \equiv \int \rho(x|m) \ln [\rho(x|m) / \rho_{\rm eq}(x)] dx \geq 0$ is the Kullback-Leibler (KL) divergence between the non-equilibrium state $\rho(x|m)$ after measurement and the equilibrium state $\rho_{\rm eq}(x)$ before measurement.
+$I$ is therefore the average KL-divergence over the possible outcomes. (see \footnote{The Second Law generalized to transformations between non-equilibrium states reads in general $\Delta W \geq \Delta F + k_B T \Delta I$ where $\Delta F$ and $\Delta I$ corresponds to the difference in equilibrium free energy and KL-divergence between the final and initial states \cite{esposito_second_2011}. For \ie the measurement induces an initial non-equilibrium state, while the feedback action usually returns the system to equilibrium. In that case $\Delta I = I(t_f) - I(t_i) = -I(t_i)$ and we obtain $\Delta W \geq \Delta F - k_B T I(t_i)$ as is used in the main text in most of the literature.} for a note on sign convention in $I$).
+As such, the thermodynamics of \ie is no more than a special case of non-equilibrium thermodynamics \cite{Parrondo_2015}.
+For a \se as shown Fig.~\ref{fig:Szilard}, the information gathered by a binary measurement reads $I = \ln(2)$ and this initial distance to equilibrium is the thermodynamic resource from which work can be extracted \footnote{For a Szil\'ard engine operating on a box of length $L = 1$ we have explicitly $\rho_{\rm eq}(x) = 1$ on $x \in [0, 1]$. The measurement can have two outcomes: either left (l) with $\rho(x|l) = 2$ on $x \in [0, \frac{1}{2}]$ or right (r) with $\rho(x|r) = 2$ on $x \in [\frac{1}{2}, 1]$. The information reads
+$I = \sum_m p(m) D_{\rm KL}(\rho(x|m)||\rho_{\rm eq}(x))dx$. In the case where both outcomes are equiprobable $p(l) = p(r) = 1/2$ one gets  $I = \frac{1}{2} \int_0^{1/2} 2 \ln(2) dx + \frac{1}{2} \int_{1/2}^2 2 \ln(2) dx = \ln(2)$ and hence $W^{\rm out} = k_B T \ln(2)$.}.
+If the measurements suffer from errors, $I$ is replaced by the mutual information between the system and the measurement device \cite{KoskiMutual2024}.
+
+The remaining steps of an ideal \se consists of reversibly transforming the energy contained in the non-equilibrium state into mechanical work, ending up back in the initial state.
+To do so, (Fig.~\ref{fig:Szilard} (c)) a partition is inserted in the box, and the state $\rho$ instantaneously becomes an equilibrium state again in the new, smaller volume.
+It can then be quasistatically driven back to the initial state, extracting work and closing the operation cycle.
+As this cycle leaves the free energy unchanged $\Delta F = 0$, the maximal energy produced reads $ \Delta W^{\rm out}_{\rm rev} = k_B T I$ where $W^{\rm out} = - W$ is the work extracted from the system.
+Here, it corresponds to $W^{\rm out}_{\rm rev} = k_B T \ln(2)$.
+
+At the level of stochastic trajectories, the Sagawa-Ueda equality generalizes Jarzinsky equality in the presence of information as $\langle e^{-(\Delta w-\Delta F)/k_B T - j} \rangle = 1$ where $j$ is the stochastic information, with $I = \langle j \rangle$ \cite{Sagawa2010}.
+While we used Szil\'ard's engine to illustrate Eq.~(\ref{eq:NeqSecondLaw}) on Fig.~\ref{fig:Szilard}, this principle extends beyond information engines to encompass all transformations between non-equilibrium states \cite{esposito_second_2011}. The positive Kullback-Leibler divergence $\mathcal{D}_{\rm KL}$ measuring the deviation from equilibrium enables these systems to exceed the performance limits of classical heat engines. This example demonstrates that work can be extracted even when the engine operates within a single heat bath.
+
+\subsection{Experimental Realizations of Information Engines}
+\label{Sec:History}
+
+The operation of an information engine requires real-time measurements of the system's fluctuations and the capability to apply feedback based on these measurements. spans various length scales, from microscopic to macroscopic, enabling the experimental realization of information engines of both the phase space splitting type (Fig.~\ref{fig:Experiments} (a,c,e)) and the conditional information engine type (Fig.~\ref{fig:Experiments} (b,d,f)) across different scales. Early implementations of Maxwell's demon \cite{serreli_molecular_2007, raizen_comprehensive_2009}, led the way to the first experimental realization of an information engine \cite{toyabe_experimental_2010}, which converted information into potential energy.
+
+\begin{figure} [h!]
+    \centering
+    \includegraphics[scale = 0.235]{Experiments.png}
+    \caption{Experimental realizations of information engines, sorted into splitting (a,c,e) and conditional (b, d, f) categories.
+    (a) A colloidal particle is manipulated with a static and  mobile optical trap. After measuring the position of the particle the potential landscape is tilted accordingly, quenching the state of the system. Adapted from \cite{roldan_universal_2014}.
+    (b) If the traped colloidal particle is measured above a defined threshold, the potential is shifted by the same amount. Transport is obtained only if the condition is applied in one direction (yellow lines), otherwise it produces cooling of the particle in the potential's co-moving frame (purple lines). Adapted from \cite{lee_experimentally-achieved_2018}.
+    (c) A DNA hairpin is held in an optical tweezers. The logic of operation is similar to the first example above, but bi-stability is a result of the spontaneous folding and unfolding of the DNA, instead of a couple of optical traps. Adapted from \cite{Ribezzi_Crivellari_2019}.
+    (d) A heavy colloidal particle is held against gravity, when it is measured above a threshold, the trap is shifted upward by twice this amount, ensuring zero work exchange.  Adapted from \cite{saha2021maximizing}.
+    (e) Many-body active Szil\'ard engine \cite{Chor2023}, based on macroscopic artificial active matter composed of bristle-bots. The number of bots in left and right halves of the box is measured, and feedback is applied by placing a partition in the middle of the box and connecting a weight to it so it would be lifted when the partition is pushed towards the less dense half.
+    (f) Conditional engine in the inertial regime \cite{archambault2024first}. The fluctuations of a micron-scale cantilever in vacuum are monitored and a feedback potential allows to switch the center of the effective harmonic potential, condition by the crossing of a defined threshold by the cantilever.}
+    \label{fig:Experiments}
+\end{figure}
+
+Explicit \ie operating on the nanometer scale have been realized with two very different experimental systems.
+On the one hand, using a pair of nanometric metallic islands, forming a single electron box \cite{koski_experimental_2014}.
+In this work, one extra electron can fluctuate between both metallic islands, its state is monitored by a single-electron transistor electrometer and the gate voltage applied to the islands is modified accordingly.
+In doing so, the electron is captured in its measured state, before being slowly released, extracting energy from its thermal hopping between islands.
+On the other hand, using a stretched DNA hairpin (Fig.~\ref{fig:Experiments}~(c)) \cite{Ribezzi_Crivellari_2019}, rectifying the fluctuations between folded and unfolded states, monitored and manipulated using optical tweezers. Both realizations use a Szil\'ard-like phase-space splitting protocol and share the following logic: the system fluctuates between two metastable states. Upon measurement, the system is quenched in its current state by a strong external potential. Work is extracted from thermal jumps during the quasistatic return to the original bistable state.
+
+The majority of realized information engines operate on the mesoscopic micrometer scale, where the working substance is a single colloidal particle in a fluid. Here, Brownian motion rectification is performed by optical tweezers and electric fields. One of the early realizations was based on a similar phase-space splitting protocol as the examples above, where bistability is induced through a double-well optical potential (Fig.~\ref{fig:Experiments}~~(a)) \cite{roldan_universal_2014}. In this setup, the distance between both wells and their depths is adjusted to quench spontaneous fluctuations and extract work. Several other mesoscopic information engines were designed to convert information into translation, entering our second category: conditional feedback, compressing phase space. These engines achieved energetically cost-less transport (Fig.~\ref{fig:Experiments}~(b)) \cite{paneru_lossless_2018, lee_experimentally-achieved_2018}, climbing up a potential landscape (Fig.~\ref{fig:Experiments}~(d)) \cite{toyabe_experimental_2010, saha2021maximizing}, and even translation against a fluid current \cite{admon_experimental_2018}. In these engines, the operating mode involves monitoring the particle's position within the effective potential at regular time intervals. When a beneficial fluctuation is detected, such as the particle moving in the desired direction, feedback is applied by adjusting the potential to prevent the particle from reverting to its previous state.
+
+Both types of information engines, phase-space splitting, and conditional feedback, were realized on the macroscopic scale as well. Notably, fluctuations at this scale are not thermal but instead result from external or internal driving forces, making the working substance (system and heat reservoir) far from thermal equilibrium. At the macroscopic scale, the environmental degrees of freedom become accessible, allowing for quantification and manipulation of the bath itself. 
+
+A macroscopic conditional information engine was realized using a blade in a driven granular gas as the working substance \cite{lagoin_human-scale_2022}, which is typically characterized by thermal-like velocity distribution \cite{puglisi2012structure, gnoli_brownian_2013}. In this realization, collisions between the granular gas and an immersed blade were rectified electrically to result in an angular drift of the blade. A Szil\'ard's-like splitting engine was realized using bristle robots (bbots) as a many-body working substance (Fig.~\ref{fig:Experiments}~(e)) \cite{Chor2023}. bbots are a class of active matter that exhibits correlated motion \cite{deblais2018boundaries, giomi2013swarming} resulting in anomalously large density fluctuations \cite{ramaswamy2003active, ginelli2010large}. In this experiment, the number of particles on each side of a chamber was measured. A partition was then inserted in the middle of the chamber, and a mass was connected to it in the direction of the most populated side. Work was extracted by the motion of the partition towards the less populated half of the system, which raised the mass against gravity.
+
+\subsection{Key Aspects of Operation: From Symmetry to Efficiency}
+
+Spatial and temporal symmetries are central in the operation of information engines.
+For example, at the beginning of the cycle of a \s engine, as depicted on the left panel of Fig.~\ref{fig:IEs_sketch} (a) and (b), the left/right measurement corresponds to a spatial symmetry breaking of the probed phase-space \cite{horowitz2013optimizing}.
+Conversely, the end of the same cycle (Fig.~\ref{fig:IEs_sketch} (c) and (d)) corresponds to the associated symmetry restoration.
+The change in entropy during the breaking and recovery of spatial symmetry dictates the thermodynamics of the engine \cite{horowitz2013optimizing, roldan_universal_2014}.
+Interestingly, this original \s engine, which operates through spatial symmetry breaking, can achieve 100\% efficiency in converting information to work \cite{szilard1929entropieverminderung,Parrondo_2015}.
+This is the consequence of another symmetry aspect: the temporal symmetry of its ideal cycle of operation, i.e., its thermodynamic reversibility \cite{horowitz2010nonequilibrium, horowitz2013optimizing, ashida_general_2014}.
+
+
+In contrast with the ideal operation of Szil\'ard engine, many information engines lack reversibility, leading to a lower value for the maximal work extracted: they do not reach equality in the Second Law  Eq.~(\ref{eq:NeqSecondLaw}).
+Reversibility can break due to numerous effects, some of them intrinsically connected to the operation of the engine.
+This motivated the definition of a modified version of the Second Law, explicitly incorporating irreversibility
+\begin{equation}
+    \Delta W \geq \Delta F - k_B T (I - I_u)
+    \label{eq:GenNeqSecondLaw}
+\end{equation}
+where $I_u$ is called \textit{unavailable} information \cite{ashida_general_2014}.
+It quantifies irreversibility as the relative fraction of time-reversed paths that do not exist in the forward operation of the feedback.
+More precisely, a phase-splitting Szil\'ard engine (Fig.~\ref{fig:IEs_sketch} (left)), follows the steps (1) to (4) as detailed above.
+Its backward operation corresponds to reinserting the partition from the side of the box and slowly compress the single-particle gas back to half the full volume.
+It ends up in the initial post-measurement state, showing the reversibility of the engine's operation.
+In most experimental realizations however, the box is formed by a potential, typically quadratic \cite{roldan_universal_2014, toyabe_experimental_2010, Ribezzi_Crivellari_2019, archambault2024inertial}.
+In that case, when reinserting the partition from a finite position, there will always be a non-zero probability that the particle lies beyond it \cite{archambault2024inertial}.
+In that \textit{singular} case, compressing the volume again does not lead to the initial post-measurement state, since the particle lies on the wrong side of the partition \cite{Horowitz_2010, horowitz2011thermodynamic}.
+Eq.~(\ref{eq:GenNeqSecondLaw}) accounts for the associated decrease of available work.
+Notably, these singular paths arise by construction for any conditional phase-contracting information engines (Fig.~\ref{fig:IEs_sketch} (right)).
+Time-reversal symmetry is also broken for many-body \se  \cite{horowitz2013optimizing, Chor2023} which will be presented in the final section of this perspective.
+
+
+
+Finally, due to the feedback mechanism, the system's dynamic is correlated with the measurements.
+It is therefore affected by measurement errors such as detection uncertainties and the temporal delay in the feedback.
+This is another source of irreversibility progressively degrading the work output, eventually reaching a threshold where work extraction becomes impossible \cite{saha_bayesian_2022}. This limitation has been overcome using inference techniques: by implementing a Bayesian approach that leverages past measurements to better predict current system states, researchers have achieved robust power output even in noisy conditions \cite{saha_bayesian_2022}.
+
+The generalized Second Law Eq.~(\ref{eq:GenNeqSecondLaw}) is derived from a generalized Jarzynski equality \cite{ashida_general_2014}.
+It provides a tight upper bound on the maximum work extractable by irreversible information engines, as verified experimentally in refs.~\cite{paneru_lossless_2018, archambault2024first}.
+
+Reversely, natural correlations and memory in the dynamics can be used to increase the output power of conditional engines, by adapting the rate of measurement.
+This was explored for a microsphere under the influence of gravity in ref.~\cite{saha2021maximizing} (Fig.~\ref{fig:Experiments}d).
+Measuring the particle's position very frequently eventually allows for the rectification of any positive fluctuation in the system.
+Similarly, continuously monitoring the movement of a DNA hairpin and its correlations allows the rectification of rare crossing events, increasing the power extraction \cite{Ribezzi_Crivellari_2019}.
+However, information processing has an energetic cost, as formalized by Landauer's principle \cite{Parrondo_2015}.
+This is the motivation for the definition of the information-to-work conversion efficiency of an \ie
+\begin{equation}
+    \eta = \frac{W^{\rm out}}{k_B T (I-I_u) + \sum_i W_i}
+\end{equation}
+relating the useful information $I-I_u$ and the output work $W^{\rm out}$.  $\sum_i W_i$ is a shorthand for all additional costs of operating the engine: dissipation during non-quasistatic transformations, or spurious work applied on the system.
+Just like regular thermal engines \cite{schmiedl2007efficiency}, \ie can be designed to maximize a trade-off between power and efficiency.
+This was explored for a particle transported across space \cite{lee_experimentally-achieved_2018} and against a fluid flow \cite{admon_experimental_2018}.
+In both experiments, it is demonstrated that an optimal rate of measurement exists that allows for the mitigation of information costs and the increase in power extraction.
+
+Dynamic correlations become particularly significant in active self-propelled systems and underdamped dynamics. In these cases, the relationship between engine operation and power extraction follows more intricate patterns \cite{archambault2024inertial, archambault2024first, saha2021maximizing}. We will examine these complexities in detail in the final section of this perspective.
+
+
+\subsection{Different Approaches for Work Extraction}
+
+
+In experimental Szil\'ard-like \ie, work is extracted from \ie in the return to the engine's initial state (Fig.~\ref{fig:IEs_sketch}c).
+In the experiment mentioned above \cite{koski_experimental_2014, Ribezzi_Crivellari_2019,roldan_universal_2014}, work is extracted when the system slowly returns to a symmetric equilibrium state. However, the extracted energy is not coupled to an external system but rather dissipated into heat.
+
+In experimental conditional information engines, two cases must be distinguished.
+First, in transport on a flat energy surface \cite{lee_experimentally-achieved_2018}, no work is extracted, but rather, the natural cost of the operation is avoided.
+Second, if the transport is exerted against some potential, energy is effectively stored \cite{toyabe_experimental_2010, admon_experimental_2018, saha2021maximizing}.
+The stored energy could be extracted by letting the particle flow down the potential but here again this energy would be dissipated as heat if the particle is not coupled to an external device.
+
+
+Only a few experimental realizations coupled the engine to an external system to harvest mechanical work. Examples include the macroscopic Brownian ratchet \cite{lagoin_human-scale_2022} where a blade immersed in granular gas was coupled to a motor to create a current, as well as a macroscopic many-body \se \cite{Chor2023}, where weight was lifted against gravity.
+Notably, these two experiments are macroscopic systems, based on athermal fluctuations.
+In the latter \cite{Chor2023}, controlling the load in time further allows to approach the quasistatic limit, where work extraction is maximal.
+Constructing energy transduction at the microscopic scale is possible but more challenging due to the fluctuating nature of devices in this scale, aligning with Feynman's historical refutation of the ratchet and pawl mechanism \cite{feynman1965feynman, bang2018experimental}. 
+
+
+
+\section{New horizons}
+\label{Sec:NewHorizons}
+
+Experimental realization of information engines are tightly connected to the parallel development of stochastic thermodynamics, progressively incorporating more complex and rich working substances.
+New challenges have emerge, but also innovative approaches to enhance engine performance. Three key research directions have shaped the field: \textbf{A.} non-thermal or active working substances and many-body systems, \textbf{B.} inertial effects, and \textbf{C.} optimal control.
+
+\subsection{Active Matter and Collective Effects in \IE}
+
+Models of active particles, such as bacterial swarms or animal flocking, were introduced to mimic biological phenomena \cite{vicsek1995novel, solon2024thirty}. These systems, composed of energy-converting agents like bacteria and artificial self-propelled particles, are now a key research area in stochastic thermodynamics \cite{ramaswamy2010mechanics, fodor2018statistical, fodor2016far, fodor2021active, Albay2O23, davis2024active}
+
+A minimal model for active particles involves a particle interacting with correlated and potentially non-Gaussian noise. Such non-equilibrium fluctuations can arise naturally from internal mechanisms, such as bacterial self-propulsion \cite{di_leonardo_bacterial_2010}, or be incorporated in a controlled manner by external driving forces \cite{Goerlich2022, saha2023information}. The presence of correlated noise alone can generate superdiffusion and increase effective temperatures, enhancing work extraction and efficiency in heat engines \cite{holubec2020active, krishnamurthy2016micrometre, martinez_colloidal_2017}.
+Consequently, several theoretical studies predict a substantial enhancement in the performance of \ie when active self-propelled particles are considered \cite{paneru_optimal_2018, paneru_colossal_2022, malgaretti_szilard_2022, cocconi_efficiency_2024, rafeek2024active, garcia2024optimal}.
+
+The performance of \ie ultimately relies on the temperature difference between the hot working substance and the cold measurement-feedback device, which enables precise tasks. One of the key effects of non-equilibrium driving noise is the large increase in the system's effective temperature due to large fluctuations \cite{Goerlich2022, di_leonardo_bacterial_2010}. These excess fluctuations can be harvested to extract energy, similar to biological molecular motors that harness large non-equilibrium fluctuations \cite{ariga2021noise}. As discussed in \cite{saha2023information}, rectifying non-equilibrium fluctuations can also be scaled to macroscopic systems, such as turbulent flows \cite{francois2020nonequilibrium}, potentially opening new avenues for energy harvesting.
+
+
+Beyond non-equilibrium fluctuations, the emergence of complex collective behaviors, driven by the properties of the constituents, such as shape, number, propulsion mechanisms, and couplings, gives rise to exotic phases such as flocking \cite{deseigne2010collective, liebchen2017collective, liebchen2018synthetic}, mobility-induced phase separation \cite{cates2015motility}, swarming \cite{aranson2022bacterial, giomi2013swarming}, boundary effects \cite{deblais2018boundaries}, giant number fluctuations \cite{ramaswamy2003active, ginelli2010large}, and non-reciprocal interactions \cite{loos2020irreversibility, dinelli2023non, fruchart2021non}. 
+These phenomena will significantly influence the operation of information engines, offering numerous possibilities for design and control. The development of novel information engines can harness two key phenomena: the long temporal persistence induced by activity and the large spatial correlations in collective effects. This approach brings information engines closer to biological systems, where information processing naturally occurs within an active environment.
+
+Activity also interplays non-trivially with many-body effects in information engines. Consider again the example of the Szil\'ard engine: what happens when the number of particles in the chamber increases? Can more work be extracted? Experimental evidence shows that the answer depends significantly on whether the particles are ideal gas molecules or active self-propelled particles \cite{Chor2023}. For ideal gas molecules, the probability of finding them on either side of the box follows a binomial distribution. As the number of molecules increases, relatively small imbalances in the density, that result in even smaller work extraction, become more likely. Consequently, the average work extracted per measurement decreases as the number of molecules grows.
+In stark contrast, active particles exhibit giant number fluctuations. As a result, when measuring the state of a many-body active Szil\'ard engine, there is a high probability of finding an uneven distribution of particles, leading to significant work extraction. In this case, the average work per measurement increases with the number of active particles \cite{Chor2023}.
+
+\subsection{Inertial Effects}
+
+Another significant advancement in stochastic thermodynamics is its application to underdamped stochastic systems, such as levitating particles in optical tweezers \cite{rondin2017direct, gonzalez2021levitodynamics, piotrowski2023simultaneous} and micro-cantilevers \cite{dago2021information, dago2022dynamics, dago2023adiabatic, barros2024probabilistic}. These experimental platforms extended the range of accessible thermal phenomena \cite{rademacher2022nonequilibrium, Dechant2015, rondin2017direct}, opening new avenues towards  the thermodynamics of feedback \cite{debiossac2020thermodynamics} and of quantum systems,  via ground state cooling \cite{Brunelli2018}. On a macroscopic scale, inertial effects natuarally arise in granular gases \cite{puglisi1999kinetic, puglisi2002fluctuation}.
+
+Underdamped \ie have been explored recently using micro-cantilevers (Fig.~\ref{fig:Experiments}~(f)) \cite{archambault2024inertial}.
+In this conditional information engine, a micro-cantilever fluctuates in an external potential and its position is measured at regular intervals of duration $\tau$. If the measured value exceeds a set threshold, the potential is shifted in the same direction, similarly to the protocol in Fig.~\ref{fig:Experiments}~(b) \cite{paneru_lossless_2018, lee_experimentally-achieved_2018}. This protocol enables two distinct operations.
+First, if the potential is shifted by exactly twice the measured position, the potential energy is conserved, but the system will relax around a shifted equilibrium position. This leads to net transport with zero work injection.
+Second, if the potential is shifted by a smaller amount, the transport is reduced, but a net work is extracted at each application of the feedback.
+
+Significant differences between overdamped and underdamped systems arise for finite $\tau$, which is the condition for finite power output. In the overdamped case, the power monotonically decreases as $\tau$ increases \cite{park2016optimal} while in the underdamped case, power is maximal for a finite $\tau$.
+Resonances with relaxation time can cause a collapse in power output.
+In the case where potential energy (e.g. gravity) is stored at each step \cite{saha2021maximizing} the interplay between parameters described in \cite{archambault2024inertial} could be leveraged to further maximize energy harvesting.
+With a measurable velocity, inertial systems also provide new routes to the optimal design of \ie \cite{saha2021maximizing}.
+
+
+\subsection{Optimal Control}
+
+To extract finite power from \ie (or any thermodynamic machine), finite-time operation is required. However, energy dissipation during a thermodynamic transformation only vanishes in the case of a slow reversible process, which saturates the Second Law, Eq.~(\ref{eq:NeqSecondLaw}). 
+Optimal control theory aims to identify protocols that reduce the time required for a transformation while minimizing dissipation \cite{schmiedl2007optimal, gomez2008optimal, rosales2020optimal, pires2023optimal, guery2023driving, loos2024universal, baldovin2024optimal}. Applying optimal control to the operation of \ie should prove crucial, as it will enable rapid operation with minimal losses, thereby increasing both power output and efficiency.
+
+In the operation of an information engine, both the timing of measurements and the protocol of work extraction can be controlled to optimize the operation of the engine.
+
+The most straightforward parameter governing the performance of an \ie is the measurement rate, which tunes the trade-off between power and efficiency \cite{saha2021maximizing, admon_experimental_2018}.
+The decrease in efficiency at high rates is rooted in the cost of information erasure \cite{landauer1961irreversibility, lutz_information_2015}.
+While most studies of \ie used the theoretical minimal Landauer cost for erasure in efficiency assessments, practical \ie rarely achieve this ideal limit. Several experiments focused specifically on the issue of minimizing dissipation in erasure, both in the quasistatic regime \cite{berut_experimental_2012, klaers_landauers_2019} and more recently, in finite-time \cite{dago2023adiabatic}.
+
+
+The second aspect of optimization considers the feedback and work extraction protocols, usually via time manipulation of the potential.
+Specifically, seeking to optimize state-to-state transformation from the non-equilibrium state just after measurement to the final equilibrium state, which closes the engine's cycle.
+New optimization procedures are needed to design such protocols minimizing dissipation over finite times \cite{esposito_second_2011}.
+This task is even more challenging for active working substances \cite{davis2024active}.
+
+A few initial theoretical works have focused on optimizing the operation of information engines.
+In ref.~\cite{kamijima2024finite}, the information flows between the system and the demon is manipulated to minimize dissipation.
+In ref.~\cite{garcia2024optimal} an optimal protocol to control active particles is derived, and used to build a cyclic information engine, which efficiency depends on the specific parameters of the active particle involved.
+In general, the optimal operation of information engines depends on system-specific parameters. Interestingly, the relevant parameters can be inferred from the engine's measurements, enabling a dynamic approach where the operation is continuously adjusted based on real-time data.
+The use of reinforcement learning \cite{Whitelam2023, barros2024learning} further extends the range of application, beyond analytical solutions.
+It could lead to the development of model-free optimal information engines using the result of past measurement to optimize the future operation.
+
+\section{Conclusions}
+\label{Sec:Conclusions}
+
+
+In this perspective, we discussed recent advancements and emerging directions for information engines, emphasizing experimental realizations across scales from nanometric to macroscopic. We reviewed their working principles, their thermodynamics, and the role of reversibility in optimizing work extraction, focusing on their experimental realization. Key future directions are underlined.
+First, the integration of active matter and mesoscopic many-body systems in \ie  enhance power extraction through non-equilibrium noise and complex collective phenomena. Additionally, inertial effects induce intricate relationships between operational and relaxation times, demanding refined measurement protocols. Finally,optimal control theory and machine learning represent new paths to enhance the performance and adaptively optimize information engines.
+
+\section*{Acknowledgments}
+We sincerely thank Cyriaque Genet for insightful discussions.
+Y.R. acknowledges support from the Israel Science Foundation (grants No. 385/21). Y.R, L.H, and R.G. acknowledge support from the European Research Council (ERC) under the European Union’s Horizon 2020 research and innovation programme (Grant agreement No. 101002392). R.G. acknowledges support from the Mark Ratner Institute for Single Molecule Chemistry at Tel Aviv University.
+SR is grateful for support from the the Israel Science Foundation (Grant No. 1929/21).
+
+%\bibliography{EPL_Persp}
+
+\begin{thebibliography}{117}%
+	\makeatletter
+	\providecommand \@ifxundefined [1]{%
+		\@ifx{#1\undefined}
+	}%
+	\providecommand \@ifnum [1]{%
+		\ifnum #1\expandafter \@firstoftwo
+		\else \expandafter \@secondoftwo
+		\fi
+	}%
+	\providecommand \@ifx [1]{%
+		\ifx #1\expandafter \@firstoftwo
+		\else \expandafter \@secondoftwo
+		\fi
+	}%
+	\providecommand \natexlab [1]{#1}%
+	\providecommand \enquote  [1]{``#1''}%
+	\providecommand \bibnamefont  [1]{#1}%
+	\providecommand \bibfnamefont [1]{#1}%
+	\providecommand \citenamefont [1]{#1}%
+	\providecommand \href@noop [0]{\@secondoftwo}%
+	\providecommand \href [0]{\begingroup \@sanitize@url \@href}%
+	\providecommand \@href[1]{\@@startlink{#1}\@@href}%
+	\providecommand \@@href[1]{\endgroup#1\@@endlink}%
+	\providecommand \@sanitize@url [0]{\catcode `\\12\catcode `\$12\catcode
+		`\&12\catcode `\#12\catcode `\^12\catcode `\_12\catcode `\%12\relax}%
+	\providecommand \@@startlink[1]{}%
+	\providecommand \@@endlink[0]{}%
+	\providecommand \url  [0]{\begingroup\@sanitize@url \@url }%
+	\providecommand \@url [1]{\endgroup\@href {#1}{\urlprefix }}%
+	\providecommand \urlprefix  [0]{URL }%
+	\providecommand \Eprint [0]{\href }%
+	\providecommand \doibase [0]{https://doi.org/}%
+	\providecommand \selectlanguage [0]{\@gobble}%
+	\providecommand \bibinfo  [0]{\@secondoftwo}%
+	\providecommand \bibfield  [0]{\@secondoftwo}%
+	\providecommand \translation [1]{[#1]}%
+	\providecommand \BibitemOpen [0]{}%
+	\providecommand \bibitemStop [0]{}%
+	\providecommand \bibitemNoStop [0]{.\EOS\space}%
+	\providecommand \EOS [0]{\spacefactor3000\relax}%
+	\providecommand \BibitemShut  [1]{\csname bibitem#1\endcsname}%
+	\let\auto@bib@innerbib\@empty
+	%</preamble>
+	\bibitem [{\citenamefont {Maxwell}(1871)}]{maxwell1871theory}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.~C.}\ \bibnamefont
+			{Maxwell}},\ }\bibfield  {title} {\bibinfo {title} {Theory of heat},\
+	}\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {London, UK:
+				Longmans}\ } (\bibinfo {year} {1871})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Szilard}(1929)}]{szilard1929entropieverminderung}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {L.}~\bibnamefont
+			{Szilard}},\ }\bibfield  {title} {\bibinfo {title} {{\"U}ber die
+			entropieverminderung in einem thermodynamischen system bei eingriffen
+			intelligenter wesen},\ }\href@noop {} {\bibfield  {journal} {\bibinfo
+			{journal} {Zeitschrift f{\"u}r Physik}\ }\textbf {\bibinfo {volume} {53}},\
+		\bibinfo {pages} {840} (\bibinfo {year} {1929})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Szilard}(1964)}]{szilard1964decrease}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {L.}~\bibnamefont
+			{Szilard}},\ }\bibfield  {title} {\bibinfo {title} {On the decrease of
+			entropy in a thermodynamic system by the intervention of intelligent
+			beings},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal}
+			{Behavioral Science}\ }\textbf {\bibinfo {volume} {9}},\ \bibinfo {pages}
+		{301} (\bibinfo {year} {1964})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Parrondo}\ \emph {et~al.}(2015)\citenamefont
+		{Parrondo}, \citenamefont {Horowitz},\ and\ \citenamefont
+		{Sagawa}}]{Parrondo_2015}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.~M.~R.}\
+			\bibnamefont {Parrondo}}, \bibinfo {author} {\bibfnamefont {J.~M.}\
+			\bibnamefont {Horowitz}},\ and\ \bibinfo {author} {\bibfnamefont
+			{T.}~\bibnamefont {Sagawa}},\ }\bibfield  {title} {\bibinfo {title}
+		{Thermodynamics of information},\ }\href {https://doi.org/10.1038/nphys3230}
+	{\bibfield  {journal} {\bibinfo  {journal} {Nature Physics}\ }\textbf
+		{\bibinfo {volume} {11}},\ \bibinfo {pages} {131} (\bibinfo {year} {2015})},\
+	\bibinfo {note} {publisher: Springer Science and Business Media
+		LLC}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Lutz}\ and\ \citenamefont
+		{Ciliberto}(2015)}]{lutz_information_2015}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {E.}~\bibnamefont
+			{Lutz}}\ and\ \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont
+			{Ciliberto}},\ }\bibfield  {title} {\bibinfo {title} {Information: {From}
+			{Maxwell}’s demon to {Landauer}’s eraser},\ }\href
+	{https://doi.org/10.1063/PT.3.2912} {\bibfield  {journal} {\bibinfo
+			{journal} {Physics Today}\ }\textbf {\bibinfo {volume} {68}},\ \bibinfo
+		{pages} {30} (\bibinfo {year} {2015})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Paneru}\ and\ \citenamefont
+		{Kyu~Pak}(2020)}]{paneru_colloidal_2020}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {G.}~\bibnamefont
+			{Paneru}}\ and\ \bibinfo {author} {\bibfnamefont {H.}~\bibnamefont
+			{Kyu~Pak}},\ }\bibfield  {title} {\bibinfo {title} {Colloidal engines for
+			innovative tests of information thermodynamics},\ }\href
+	{https://doi.org/10.1080/23746149.2020.1823880} {\bibfield  {journal}
+		{\bibinfo  {journal} {Advances in Physics: X}\ }\textbf {\bibinfo {volume}
+			{5}},\ \bibinfo {pages} {1823880} (\bibinfo {year} {2020})},\ \bibinfo {note}
+	{publisher: Taylor \& Francis \_eprint:
+		https://doi.org/10.1080/23746149.2020.1823880}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Sagawa}\ and\ \citenamefont
+		{Ueda}(2010{\natexlab{a}})}]{sagawa_generalized_2010}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.}~\bibnamefont
+			{Sagawa}}\ and\ \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Ueda}},\
+	}\bibfield  {title} {\bibinfo {title} {Generalized {Jarzynski} {Equality}
+			under {Nonequilibrium} {Feedback} {Control}},\ }\href
+	{https://doi.org/10.1103/PhysRevLett.104.090602} {\bibfield  {journal}
+		{\bibinfo  {journal} {Physical Review Letters}\ }\textbf {\bibinfo {volume}
+			{104}},\ \bibinfo {pages} {090602} (\bibinfo {year} {2010}{\natexlab{a}})},\
+	\bibinfo {note} {publisher: American Physical Society}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Esposito}\ and\ \citenamefont
+		{Broeck}(2011)}]{esposito_second_2011}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont
+			{Esposito}}\ and\ \bibinfo {author} {\bibfnamefont {C.~V.~d.}\ \bibnamefont
+			{Broeck}},\ }\bibfield  {title} {\bibinfo {title} {Second law and landauer
+			principle far from equilibrium},\ }\href
+	{https://doi.org/10.1209/0295-5075/95/40004} {\bibfield  {journal} {\bibinfo
+			{journal} {Europhysics Letters}\ }\textbf {\bibinfo {volume} {95}},\ \bibinfo
+		{pages} {40004} (\bibinfo {year} {2011})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Ashida}\ \emph {et~al.}(2014)\citenamefont {Ashida},
+		\citenamefont {Funo}, \citenamefont {Murashita},\ and\ \citenamefont
+		{Ueda}}]{ashida_general_2014}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {Y.}~\bibnamefont
+			{Ashida}}, \bibinfo {author} {\bibfnamefont {K.}~\bibnamefont {Funo}},
+		\bibinfo {author} {\bibfnamefont {Y.}~\bibnamefont {Murashita}},\ and\
+		\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Ueda}},\ }\bibfield
+	{title} {\bibinfo {title} {General achievable bound of extractable work under
+			feedback control},\ }\href
+	{https://link.aps.org/doi/10.1103/PhysRevE.90.052125} {\bibfield  {journal}
+		{\bibinfo  {journal} {Physical Review E}\ }\textbf {\bibinfo {volume} {90}},\
+		\bibinfo {pages} {052125} (\bibinfo {year} {2014})}\BibitemShut {NoStop}%
+	\bibitem [{Note1()}]{Note1}%
+	\BibitemOpen
+	\bibinfo {note} {In many experimental realizations \cite
+		{sagawa_generalized_2010, admon_experimental_2018, saha2021maximizing}, the
+		measurement-feedback scheme allows to store potential energy, which is not
+		necessarily extracted, which also releases the constrain of erasing the
+		memory.}\BibitemShut {Stop}%
+	\bibitem [{\citenamefont {Toyabe}\ \emph {et~al.}(2010)\citenamefont {Toyabe},
+		\citenamefont {Sagawa}, \citenamefont {Ueda}, \citenamefont {Muneyuki},\ and\
+		\citenamefont {Sano}}]{toyabe_experimental_2010}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {S.}~\bibnamefont
+			{Toyabe}}, \bibinfo {author} {\bibfnamefont {T.}~\bibnamefont {Sagawa}},
+		\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Ueda}}, \bibinfo {author}
+		{\bibfnamefont {E.}~\bibnamefont {Muneyuki}},\ and\ \bibinfo {author}
+		{\bibfnamefont {M.}~\bibnamefont {Sano}},\ }\bibfield  {title} {\bibinfo
+		{title} {Experimental demonstration of information-to-energy conversion and
+			validation of the generalized {Jarzynski} equality},\ }\href
+	{https://doi.org/10.1038/nphys1821} {\bibfield  {journal} {\bibinfo
+			{journal} {Nature Physics}\ }\textbf {\bibinfo {volume} {6}},\ \bibinfo
+		{pages} {988} (\bibinfo {year} {2010})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Roldán}\ \emph {et~al.}(2014)\citenamefont
+		{Roldán}, \citenamefont {Martínez}, \citenamefont {Parrondo},\ and\
+		\citenamefont {Petrov}}]{roldan_universal_2014}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {E.}~\bibnamefont
+			{Roldán}}, \bibinfo {author} {\bibfnamefont {I.~A.}\ \bibnamefont
+			{Martínez}}, \bibinfo {author} {\bibfnamefont {J.~M.~R.}\ \bibnamefont
+			{Parrondo}},\ and\ \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont
+			{Petrov}},\ }\bibfield  {title} {\bibinfo {title} {Universal features in the
+			energetics of symmetry breaking},\ }\href {https://doi.org/10.1038/nphys2940}
+	{\bibfield  {journal} {\bibinfo  {journal} {Nature Physics}\ }\textbf
+		{\bibinfo {volume} {10}},\ \bibinfo {pages} {457} (\bibinfo {year} {2014})},\
+	\bibinfo {note} {number: 6 Publisher: Nature Publishing Group}\BibitemShut
+	{NoStop}%
+	\bibitem [{\citenamefont {Paneru}\ \emph
+		{et~al.}(2018{\natexlab{a}})\citenamefont {Paneru}, \citenamefont {Lee},
+		\citenamefont {Tlusty},\ and\ \citenamefont {Pak}}]{paneru_lossless_2018}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {G.}~\bibnamefont
+			{Paneru}}, \bibinfo {author} {\bibfnamefont {D.~Y.}\ \bibnamefont {Lee}},
+		\bibinfo {author} {\bibfnamefont {T.}~\bibnamefont {Tlusty}},\ and\ \bibinfo
+		{author} {\bibfnamefont {H.~K.}\ \bibnamefont {Pak}},\ }\bibfield  {title}
+	{\bibinfo {title} {Lossless {Brownian} {Information} {Engine}},\ }\href
+	{https://doi.org/10.1103/PhysRevLett.120.020601} {\bibfield  {journal}
+		{\bibinfo  {journal} {Physical Review Letters}\ }\textbf {\bibinfo {volume}
+			{120}},\ \bibinfo {pages} {020601} (\bibinfo {year} {2018}{\natexlab{a}})},\
+	\bibinfo {note} {publisher: American Physical Society}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Koski}\ \emph
+		{et~al.}(2014{\natexlab{a}})\citenamefont {Koski}, \citenamefont {Maisi},
+		\citenamefont {Sagawa},\ and\ \citenamefont
+		{Pekola}}]{koski_experimental_2014}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont
+			{Koski}}, \bibinfo {author} {\bibfnamefont {V.}~\bibnamefont {Maisi}},
+		\bibinfo {author} {\bibfnamefont {T.}~\bibnamefont {Sagawa}},\ and\ \bibinfo
+		{author} {\bibfnamefont {J.}~\bibnamefont {Pekola}},\ }\bibfield  {title}
+	{\bibinfo {title} {Experimental {Observation} of the {Role} of {Mutual}
+			{Information} in the {Nonequilibrium} {Dynamics} of a {Maxwell} {Demon}},\
+	}\href {https://doi.org/10.1103/PhysRevLett.113.030601} {\bibfield  {journal}
+		{\bibinfo  {journal} {Physical Review Letters}\ }\textbf {\bibinfo {volume}
+			{113}},\ \bibinfo {pages} {030601} (\bibinfo {year}
+		{2014}{\natexlab{a}})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Chida}\ \emph {et~al.}(2017)\citenamefont {Chida},
+		\citenamefont {Desai}, \citenamefont {Nishiguchi},\ and\ \citenamefont
+		{Fujiwara}}]{chida_power_2017}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {K.}~\bibnamefont
+			{Chida}}, \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Desai}},
+		\bibinfo {author} {\bibfnamefont {K.}~\bibnamefont {Nishiguchi}},\ and\
+		\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Fujiwara}},\ }\bibfield
+	{title} {\bibinfo {title} {Power generator driven by {Maxwell}’s demon},\
+	}\href {https://doi.org/10.1038/ncomms15301} {\bibfield  {journal} {\bibinfo
+			{journal} {Nature Communications}\ }\textbf {\bibinfo {volume} {8}},\
+		\bibinfo {pages} {15301} (\bibinfo {year} {2017})},\ \bibinfo {note} {number:
+		1 Publisher: Nature Publishing Group}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Ribezzi-Crivellari}\ and\ \citenamefont
+		{Ritort}(2019)}]{Ribezzi_Crivellari_2019}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont
+			{Ribezzi-Crivellari}}\ and\ \bibinfo {author} {\bibfnamefont
+			{F.}~\bibnamefont {Ritort}},\ }\bibfield  {title} {\bibinfo {title} {Large
+			work extraction and the {Landauer} limit in a continuous {Maxwell} demon},\
+	}\href {https://doi.org/10.1038/s41567-019-0481-0} {\bibfield  {journal}
+		{\bibinfo  {journal} {Nature Physics}\ }\textbf {\bibinfo {volume} {15}},\
+		\bibinfo {pages} {660} (\bibinfo {year} {2019})},\ \bibinfo {note}
+	{publisher: Springer Science and Business Media LLC}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Lagoin}\ \emph {et~al.}(2022)\citenamefont {Lagoin},
+		\citenamefont {Crauste-Thibierge},\ and\ \citenamefont
+		{Naert}}]{lagoin_human-scale_2022}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont
+			{Lagoin}}, \bibinfo {author} {\bibfnamefont {C.}~\bibnamefont
+			{Crauste-Thibierge}},\ and\ \bibinfo {author} {\bibfnamefont
+			{A.}~\bibnamefont {Naert}},\ }\bibfield  {title} {\bibinfo {title}
+		{Human-{Scale} {Brownian} {Ratchet}: {A} {Historical} {Thought}
+			{Experiment}},\ }\href {https://doi.org/10.1103/PhysRevLett.129.120606}
+	{\bibfield  {journal} {\bibinfo  {journal} {Physical Review Letters}\
+		}\textbf {\bibinfo {volume} {129}},\ \bibinfo {pages} {120606} (\bibinfo
+		{year} {2022})},\ \bibinfo {note} {publisher: American Physical
+		Society}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Chor}\ \emph {et~al.}(2023)\citenamefont {Chor},
+		\citenamefont {Sohachi}, \citenamefont {Goerlich}, \citenamefont {Rosen},
+		\citenamefont {Rahav},\ and\ \citenamefont {Roichman}}]{Chor2023}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {O.}~\bibnamefont
+			{Chor}}, \bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Sohachi}},
+		\bibinfo {author} {\bibfnamefont {R.}~\bibnamefont {Goerlich}}, \bibinfo
+		{author} {\bibfnamefont {E.}~\bibnamefont {Rosen}}, \bibinfo {author}
+		{\bibfnamefont {S.}~\bibnamefont {Rahav}},\ and\ \bibinfo {author}
+		{\bibfnamefont {Y.}~\bibnamefont {Roichman}},\ }\bibfield  {title} {\bibinfo
+		{title} {Many-body szil\'ard engine with giant number fluctuations},\ }\href
+	{https://doi.org/10.1103/PhysRevResearch.5.043193} {\bibfield  {journal}
+		{\bibinfo  {journal} {Phys. Rev. Res.}\ }\textbf {\bibinfo {volume} {5}},\
+		\bibinfo {pages} {043193} (\bibinfo {year} {2023})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Paneru}\ \emph
+		{et~al.}(2018{\natexlab{b}})\citenamefont {Paneru}, \citenamefont {Lee},
+		\citenamefont {Park}, \citenamefont {Park}, \citenamefont {Noh},\ and\
+		\citenamefont {Pak}}]{paneru_optimal_2018}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {G.}~\bibnamefont
+			{Paneru}}, \bibinfo {author} {\bibfnamefont {D.~Y.}\ \bibnamefont {Lee}},
+		\bibinfo {author} {\bibfnamefont {J.-M.}\ \bibnamefont {Park}}, \bibinfo
+		{author} {\bibfnamefont {J.~T.}\ \bibnamefont {Park}}, \bibinfo {author}
+		{\bibfnamefont {J.~D.}\ \bibnamefont {Noh}},\ and\ \bibinfo {author}
+		{\bibfnamefont {H.~K.}\ \bibnamefont {Pak}},\ }\bibfield  {title} {\bibinfo
+		{title} {Optimal tuning of a {Brownian} information engine operating in a
+			nonequilibrium steady state},\ }\href
+	{https://doi.org/10.1103/PhysRevE.98.052119} {\bibfield  {journal} {\bibinfo
+			{journal} {Physical Review E}\ }\textbf {\bibinfo {volume} {98}},\ \bibinfo
+		{pages} {052119} (\bibinfo {year} {2018}{\natexlab{b}})},\ \bibinfo {note}
+	{publisher: American Physical Society}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Lucero}\ \emph {et~al.}(2021)\citenamefont {Lucero},
+		\citenamefont {Ehrich}, \citenamefont {Bechhoefer},\ and\ \citenamefont
+		{Sivak}}]{lucero_maximal_2021}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.~N.~E.}\
+			\bibnamefont {Lucero}}, \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont
+			{Ehrich}}, \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Bechhoefer}},\
+		and\ \bibinfo {author} {\bibfnamefont {D.~A.}\ \bibnamefont {Sivak}},\
+	}\bibfield  {title} {\bibinfo {title} {Maximal fluctuation exploitation in
+			{Gaussian} information engines},\ }\href
+	{https://doi.org/10.1103/PhysRevE.104.044122} {\bibfield  {journal} {\bibinfo
+			{journal} {Physical Review E}\ }\textbf {\bibinfo {volume} {104}},\ \bibinfo
+		{pages} {044122} (\bibinfo {year} {2021})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Saha}\ \emph {et~al.}(2021)\citenamefont {Saha},
+		\citenamefont {Lucero}, \citenamefont {Ehrich}, \citenamefont {Sivak},\ and\
+		\citenamefont {Bechhoefer}}]{saha2021maximizing}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.~K.}\ \bibnamefont
+			{Saha}}, \bibinfo {author} {\bibfnamefont {J.~N.}\ \bibnamefont {Lucero}},
+		\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Ehrich}}, \bibinfo
+		{author} {\bibfnamefont {D.~A.}\ \bibnamefont {Sivak}},\ and\ \bibinfo
+		{author} {\bibfnamefont {J.}~\bibnamefont {Bechhoefer}},\ }\bibfield  {title}
+	{\bibinfo {title} {Maximizing power and velocity of an information engine},\
+	}\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Proceedings of the
+				National Academy of Sciences}\ }\textbf {\bibinfo {volume} {118}},\ \bibinfo
+		{pages} {e2023356118} (\bibinfo {year} {2021})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Saha}\ \emph {et~al.}(2022)\citenamefont {Saha},
+		\citenamefont {Lucero}, \citenamefont {Ehrich}, \citenamefont {Sivak},\ and\
+		\citenamefont {Bechhoefer}}]{saha_bayesian_2022}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.~K.}\ \bibnamefont
+			{Saha}}, \bibinfo {author} {\bibfnamefont {J.~N.}\ \bibnamefont {Lucero}},
+		\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Ehrich}}, \bibinfo
+		{author} {\bibfnamefont {D.~A.}\ \bibnamefont {Sivak}},\ and\ \bibinfo
+		{author} {\bibfnamefont {J.}~\bibnamefont {Bechhoefer}},\ }\bibfield  {title}
+	{\bibinfo {title} {Bayesian {Information} {Engine} that {Optimally}
+			{Exploits} {Noisy} {Measurements}},\ }\href
+	{https://doi.org/10.1103/PhysRevLett.129.130601} {\bibfield  {journal}
+		{\bibinfo  {journal} {Physical Review Letters}\ }\textbf {\bibinfo {volume}
+			{129}},\ \bibinfo {pages} {130601} (\bibinfo {year} {2022})},\ \bibinfo
+	{note} {publisher: American Physical Society}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Mart{\'\i}nez}\ \emph {et~al.}(2017)\citenamefont
+		{Mart{\'\i}nez}, \citenamefont {Rold{\'a}n}, \citenamefont {Dinis},\ and\
+		\citenamefont {Rica}}]{martinez2017colloidal}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {I.~A.}\ \bibnamefont
+			{Mart{\'\i}nez}}, \bibinfo {author} {\bibfnamefont {{\'E}.}~\bibnamefont
+			{Rold{\'a}n}}, \bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Dinis}},\
+		and\ \bibinfo {author} {\bibfnamefont {R.~A.}\ \bibnamefont {Rica}},\
+	}\bibfield  {title} {\bibinfo {title} {Colloidal heat engines: a review},\
+	}\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Soft matter}\
+		}\textbf {\bibinfo {volume} {13}},\ \bibinfo {pages} {22} (\bibinfo {year}
+		{2017})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Ramaswamy}\ \emph {et~al.}(2003)\citenamefont
+		{Ramaswamy}, \citenamefont {Simha},\ and\ \citenamefont
+		{Toner}}]{ramaswamy2003active}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {S.}~\bibnamefont
+			{Ramaswamy}}, \bibinfo {author} {\bibfnamefont {R.~A.}\ \bibnamefont
+			{Simha}},\ and\ \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Toner}},\
+	}\bibfield  {title} {\bibinfo {title} {Active nematics on a substrate: Giant
+			number fluctuations and long-time tails},\ }\href@noop {} {\bibfield
+		{journal} {\bibinfo  {journal} {Europhysics Letters}\ }\textbf {\bibinfo
+			{volume} {62}},\ \bibinfo {pages} {196} (\bibinfo {year} {2003})}\BibitemShut
+	{NoStop}%
+	\bibitem [{\citenamefont {Fodor}\ and\ \citenamefont
+		{Cates}(2021)}]{fodor2021active}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {{\'E}.}~\bibnamefont
+			{Fodor}}\ and\ \bibinfo {author} {\bibfnamefont {M.~E.}\ \bibnamefont
+			{Cates}},\ }\bibfield  {title} {\bibinfo {title} {Active engines:
+			Thermodynamics moves forward},\ }\href@noop {} {\bibfield  {journal}
+		{\bibinfo  {journal} {Europhysics Letters}\ }\textbf {\bibinfo {volume}
+			{134}},\ \bibinfo {pages} {10003} (\bibinfo {year} {2021})}\BibitemShut
+	{NoStop}%
+	\bibitem [{\citenamefont {Seifert}(2012)}]{seifert2012stochastic}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {U.}~\bibnamefont
+			{Seifert}},\ }\bibfield  {title} {\bibinfo {title} {Stochastic
+			thermodynamics, fluctuation theorems and molecular machines},\ }\href@noop {}
+	{\bibfield  {journal} {\bibinfo  {journal} {Reports on progress in physics}\
+		}\textbf {\bibinfo {volume} {75}},\ \bibinfo {pages} {126001} (\bibinfo
+		{year} {2012})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Ciliberto}(2017)}]{ciliberto2017experiments}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {S.}~\bibnamefont
+			{Ciliberto}},\ }\bibfield  {title} {\bibinfo {title} {Experiments in
+			stochastic thermodynamics: Short history and perspectives},\ }\href@noop {}
+	{\bibfield  {journal} {\bibinfo  {journal} {Physical Review X}\ }\textbf
+		{\bibinfo {volume} {7}},\ \bibinfo {pages} {021051} (\bibinfo {year}
+		{2017})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Schmiedl}\ and\ \citenamefont
+		{Seifert}(2007{\natexlab{a}})}]{schmiedl2007optimal}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.}~\bibnamefont
+			{Schmiedl}}\ and\ \bibinfo {author} {\bibfnamefont {U.}~\bibnamefont
+			{Seifert}},\ }\bibfield  {title} {\bibinfo {title} {Optimal finite-time
+			processes in stochastic thermodynamics},\ }\href@noop {} {\bibfield
+		{journal} {\bibinfo  {journal} {Physical review letters}\ }\textbf {\bibinfo
+			{volume} {98}},\ \bibinfo {pages} {108301} (\bibinfo {year}
+		{2007}{\natexlab{a}})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Rosales-Cabara}\ \emph {et~al.}(2020)\citenamefont
+		{Rosales-Cabara}, \citenamefont {Manfredi}, \citenamefont {Schnoering},
+		\citenamefont {Hervieux}, \citenamefont {Mertz},\ and\ \citenamefont
+		{Genet}}]{rosales2020optimal}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {Y.}~\bibnamefont
+			{Rosales-Cabara}}, \bibinfo {author} {\bibfnamefont {G.}~\bibnamefont
+			{Manfredi}}, \bibinfo {author} {\bibfnamefont {G.}~\bibnamefont
+			{Schnoering}}, \bibinfo {author} {\bibfnamefont {P.-A.}\ \bibnamefont
+			{Hervieux}}, \bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Mertz}},\
+		and\ \bibinfo {author} {\bibfnamefont {C.}~\bibnamefont {Genet}},\ }\bibfield
+	{title} {\bibinfo {title} {Optimal protocols and universal time-energy bound
+			in brownian thermodynamics},\ }\href@noop {} {\bibfield  {journal} {\bibinfo
+			{journal} {Physical Review Research}\ }\textbf {\bibinfo {volume} {2}},\
+		\bibinfo {pages} {012012} (\bibinfo {year} {2020})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Pires}\ \emph {et~al.}(2023)\citenamefont {Pires},
+		\citenamefont {Goerlich}, \citenamefont {da~Fonseca}, \citenamefont
+		{Debiossac}, \citenamefont {Hervieux}, \citenamefont {Manfredi},\ and\
+		\citenamefont {Genet}}]{pires2023optimal}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {L.~B.}\ \bibnamefont
+			{Pires}}, \bibinfo {author} {\bibfnamefont {R.}~\bibnamefont {Goerlich}},
+		\bibinfo {author} {\bibfnamefont {A.~L.}\ \bibnamefont {da~Fonseca}},
+		\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Debiossac}}, \bibinfo
+		{author} {\bibfnamefont {P.-A.}\ \bibnamefont {Hervieux}}, \bibinfo {author}
+		{\bibfnamefont {G.}~\bibnamefont {Manfredi}},\ and\ \bibinfo {author}
+		{\bibfnamefont {C.}~\bibnamefont {Genet}},\ }\bibfield  {title} {\bibinfo
+		{title} {Optimal time-entropy bounds and speed limits for brownian thermal
+			shortcuts},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal}
+			{Physical Review Letters}\ }\textbf {\bibinfo {volume} {131}},\ \bibinfo
+		{pages} {097101} (\bibinfo {year} {2023})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Elgeti}\ \emph {et~al.}(2015)\citenamefont {Elgeti},
+		\citenamefont {Winkler},\ and\ \citenamefont {Gompper}}]{elgeti2015physics}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont
+			{Elgeti}}, \bibinfo {author} {\bibfnamefont {R.~G.}\ \bibnamefont
+			{Winkler}},\ and\ \bibinfo {author} {\bibfnamefont {G.}~\bibnamefont
+			{Gompper}},\ }\bibfield  {title} {\bibinfo {title} {Physics of
+			microswimmers—single particle motion and collective behavior: a review},\
+	}\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Reports on
+				progress in physics}\ }\textbf {\bibinfo {volume} {78}},\ \bibinfo {pages}
+		{056601} (\bibinfo {year} {2015})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Krishnamurthy}\ \emph {et~al.}(2016)\citenamefont
+		{Krishnamurthy}, \citenamefont {Ghosh}, \citenamefont {Chatterji},
+		\citenamefont {Ganapathy},\ and\ \citenamefont
+		{Sood}}]{krishnamurthy2016micrometre}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {S.}~\bibnamefont
+			{Krishnamurthy}}, \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont
+			{Ghosh}}, \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {Chatterji}},
+		\bibinfo {author} {\bibfnamefont {R.}~\bibnamefont {Ganapathy}},\ and\
+		\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Sood}},\ }\bibfield
+	{title} {\bibinfo {title} {A micrometre-sized heat engine operating between
+			bacterial reservoirs},\ }\href@noop {} {\bibfield  {journal} {\bibinfo
+			{journal} {Nature Physics}\ }\textbf {\bibinfo {volume} {12}},\ \bibinfo
+		{pages} {1134} (\bibinfo {year} {2016})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Solon}\ \emph {et~al.}(2015)\citenamefont {Solon},
+		\citenamefont {Fily}, \citenamefont {Baskaran}, \citenamefont {Cates},
+		\citenamefont {Kafri}, \citenamefont {Kardar},\ and\ \citenamefont
+		{Tailleur}}]{solon2015pressure}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.~P.}\ \bibnamefont
+			{Solon}}, \bibinfo {author} {\bibfnamefont {Y.}~\bibnamefont {Fily}},
+		\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Baskaran}}, \bibinfo
+		{author} {\bibfnamefont {M.~E.}\ \bibnamefont {Cates}}, \bibinfo {author}
+		{\bibfnamefont {Y.}~\bibnamefont {Kafri}}, \bibinfo {author} {\bibfnamefont
+			{M.}~\bibnamefont {Kardar}},\ and\ \bibinfo {author} {\bibfnamefont
+			{J.}~\bibnamefont {Tailleur}},\ }\bibfield  {title} {\bibinfo {title}
+		{Pressure is not a state function for generic active fluids},\ }\href@noop {}
+	{\bibfield  {journal} {\bibinfo  {journal} {Nature physics}\ }\textbf
+		{\bibinfo {volume} {11}},\ \bibinfo {pages} {673} (\bibinfo {year}
+		{2015})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Park}\ \emph
+		{et~al.}(2016{\natexlab{a}})\citenamefont {Park}, \citenamefont {Lee},\ and\
+		\citenamefont {Noh}}]{ParkOptimal2016}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.-M.}\ \bibnamefont
+			{Park}}, \bibinfo {author} {\bibfnamefont {J.~S.}\ \bibnamefont {Lee}},\ and\
+		\bibinfo {author} {\bibfnamefont {J.~D.}\ \bibnamefont {Noh}},\ }\bibfield
+	{title} {\bibinfo {title} {Optimal tuning of a confined brownian information
+			engine},\ }\href {https://doi.org/10.1103/PhysRevE.93.032146} {\bibfield
+		{journal} {\bibinfo  {journal} {Phys. Rev. E}\ }\textbf {\bibinfo {volume}
+			{93}},\ \bibinfo {pages} {032146} (\bibinfo {year}
+		{2016}{\natexlab{a}})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Davis}\ \emph {et~al.}(2024)\citenamefont {Davis},
+		\citenamefont {Proesmans},\ and\ \citenamefont {Fodor}}]{davis2024active}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {L.~K.}\ \bibnamefont
+			{Davis}}, \bibinfo {author} {\bibfnamefont {K.}~\bibnamefont {Proesmans}},\
+		and\ \bibinfo {author} {\bibfnamefont {{\'E}.}~\bibnamefont {Fodor}},\
+	}\bibfield  {title} {\bibinfo {title} {Active matter under control: Insights
+			from response theory},\ }\href@noop {} {\bibfield  {journal} {\bibinfo
+			{journal} {Physical Review X}\ }\textbf {\bibinfo {volume} {14}},\ \bibinfo
+		{pages} {011012} (\bibinfo {year} {2024})}\BibitemShut {NoStop}%
+	\bibitem [{Note2()}]{Note2}%
+	\BibitemOpen
+	\bibinfo {note} {This includes Brownian ratchets \cite {reimann2002brownian},
+		autonomous systems, diode-like systems \cite {raizen_comprehensive_2009} or
+		even apparently unrelated stochastic processes \cite {fuchs2016stochastic,
+			goerlich2023experimental}. All are able to rectify fluctuations and can
+		therefore be described using the information engines formalism. The current
+		perspective keeps a more restricted scope.}\BibitemShut {Stop}%
+	\bibitem [{\citenamefont {Lee}\ \emph {et~al.}(2018)\citenamefont {Lee},
+		\citenamefont {Um}, \citenamefont {Paneru},\ and\ \citenamefont
+		{Pak}}]{lee_experimentally-achieved_2018}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {D.~Y.}\ \bibnamefont
+			{Lee}}, \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Um}}, \bibinfo
+		{author} {\bibfnamefont {G.}~\bibnamefont {Paneru}},\ and\ \bibinfo {author}
+		{\bibfnamefont {H.~K.}\ \bibnamefont {Pak}},\ }\bibfield  {title} {\bibinfo
+		{title} {An experimentally-achieved information-driven {Brownian} motor shows
+			maximum power at the relaxation time},\ }\href
+	{https://doi.org/10.1038/s41598-018-30495-6} {\bibfield  {journal} {\bibinfo
+			{journal} {Scientific Reports}\ }\textbf {\bibinfo {volume} {8}},\ \bibinfo
+		{pages} {12121} (\bibinfo {year} {2018})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Paneru}\ \emph {et~al.}(2020)\citenamefont {Paneru},
+		\citenamefont {Dutta}, \citenamefont {Sagawa}, \citenamefont {Tlusty},\ and\
+		\citenamefont {Pak}}]{paneru_efficiency_2020}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {G.}~\bibnamefont
+			{Paneru}}, \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Dutta}},
+		\bibinfo {author} {\bibfnamefont {T.}~\bibnamefont {Sagawa}}, \bibinfo
+		{author} {\bibfnamefont {T.}~\bibnamefont {Tlusty}},\ and\ \bibinfo {author}
+		{\bibfnamefont {H.~K.}\ \bibnamefont {Pak}},\ }\bibfield  {title} {\bibinfo
+		{title} {Efficiency fluctuations and noise induced refrigerator-to-heater
+			transition in information engines},\ }\href
+	{https://doi.org/10.1038/s41467-020-14823-x} {\bibfield  {journal} {\bibinfo
+			{journal} {Nature Communications}\ }\textbf {\bibinfo {volume} {11}},\
+		\bibinfo {pages} {1012} (\bibinfo {year} {2020})},\ \bibinfo {note} {number:
+		1 Publisher: Nature Publishing Group}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Saha}\ \emph {et~al.}(2023)\citenamefont {Saha},
+		\citenamefont {Ehrich}, \citenamefont {Gavrilov}, \citenamefont {Still},
+		\citenamefont {Sivak},\ and\ \citenamefont
+		{Bechhoefer}}]{saha2023information}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.~K.}\ \bibnamefont
+			{Saha}}, \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Ehrich}},
+		\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Gavrilov}}, \bibinfo
+		{author} {\bibfnamefont {S.}~\bibnamefont {Still}}, \bibinfo {author}
+		{\bibfnamefont {D.~A.}\ \bibnamefont {Sivak}},\ and\ \bibinfo {author}
+		{\bibfnamefont {J.}~\bibnamefont {Bechhoefer}},\ }\bibfield  {title}
+	{\bibinfo {title} {Information engine in a nonequilibrium bath},\ }\href@noop
+	{} {\bibfield  {journal} {\bibinfo  {journal} {Physical Review Letters}\
+		}\textbf {\bibinfo {volume} {131}},\ \bibinfo {pages} {057101} (\bibinfo
+		{year} {2023})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Archambault}\ \emph
+		{et~al.}(2024{\natexlab{a}})\citenamefont {Archambault}, \citenamefont
+		{Crauste-Thibierge}, \citenamefont {Ciliberto},\ and\ \citenamefont
+		{Bellon}}]{archambault2024inertial}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+			{Archambault}}, \bibinfo {author} {\bibfnamefont {C.}~\bibnamefont
+			{Crauste-Thibierge}}, \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont
+			{Ciliberto}},\ and\ \bibinfo {author} {\bibfnamefont {L.}~\bibnamefont
+			{Bellon}},\ }\bibfield  {title} {\bibinfo {title} {Inertial effects in
+			discrete sampling information engines},\ }\href@noop {} {\bibfield  {journal}
+		{\bibinfo  {journal} {Europhysics Letters}\ }\textbf {\bibinfo {volume}
+			{148}},\ \bibinfo {pages} {41002} (\bibinfo {year}
+		{2024}{\natexlab{a}})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Archambault}\ \emph
+		{et~al.}(2024{\natexlab{b}})\citenamefont {Archambault}, \citenamefont
+		{Crauste-Thibierge}, \citenamefont {Imparato}, \citenamefont {Jarzynski},
+		\citenamefont {Ciliberto},\ and\ \citenamefont
+		{Bellon}}]{archambault2024first}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+			{Archambault}}, \bibinfo {author} {\bibfnamefont {C.}~\bibnamefont
+			{Crauste-Thibierge}}, \bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+			{Imparato}}, \bibinfo {author} {\bibfnamefont {C.}~\bibnamefont {Jarzynski}},
+		\bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Ciliberto}},\ and\
+		\bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Bellon}},\ }\bibfield
+	{title} {\bibinfo {title} {First-passage information engine},\ }\href@noop {}
+	{\bibfield  {journal} {\bibinfo  {journal} {arXiv preprint arXiv:2407.17414}\
+		} (\bibinfo {year} {2024}{\natexlab{b}})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Admon}\ \emph {et~al.}(2018)\citenamefont {Admon},
+		\citenamefont {Rahav},\ and\ \citenamefont
+		{Roichman}}]{admon_experimental_2018}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.}~\bibnamefont
+			{Admon}}, \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Rahav}},\ and\
+		\bibinfo {author} {\bibfnamefont {Y.}~\bibnamefont {Roichman}},\ }\bibfield
+	{title} {\bibinfo {title} {Experimental {Realization} of an {Information}
+			{Machine} with {Tunable} {Temporal} {Correlations}},\ }\href
+	{https://doi.org/10.1103/PhysRevLett.121.180601} {\bibfield  {journal}
+		{\bibinfo  {journal} {Physical Review Letters}\ }\textbf {\bibinfo {volume}
+			{121}},\ \bibinfo {pages} {180601} (\bibinfo {year} {2018})}\BibitemShut
+	{NoStop}%
+	\bibitem [{Note3()}]{Note3}%
+	\BibitemOpen
+	\bibinfo {note} {In terms of phase-space manipulation, compressing
+		phase-space into a smaller region can be viewed as an extreme case of
+		Szil\'ard-like splitting, both schemes sharing some similarities. More
+		crucial is the fact that measurements are selected in the case of conditional
+		engine}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Seifert}(2005)}]{Seifert2005}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {U.}~\bibnamefont
+			{Seifert}},\ }\bibfield  {title} {\bibinfo {title} {Entropy production along
+			a stochastic trajectory and an integral fluctuation theorem},\ }\href
+	{https://doi.org/10.1103/PhysRevLett.95.040602} {\bibfield  {journal}
+		{\bibinfo  {journal} {Phys. Rev. Lett.}\ }\textbf {\bibinfo {volume} {95}},\
+		\bibinfo {pages} {040602} (\bibinfo {year} {2005})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Sekimoto}(1998)}]{Sekimoto1998}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {K.}~\bibnamefont
+			{Sekimoto}},\ }\bibfield  {title} {\bibinfo {title} {{Langevin Equation and
+				Thermodynamics}},\ }\href {https://doi.org/10.1143/PTPS.130.17} {\bibfield
+		{journal} {\bibinfo  {journal} {Progress of Theoretical Physics Supplement}\
+		}\textbf {\bibinfo {volume} {130}},\ \bibinfo {pages} {17} (\bibinfo {year}
+		{1998})},\ \Eprint
+	{https://arxiv.org/abs/https://academic.oup.com/ptps/article-pdf/doi/10.1143/PTPS.130.17/5213518/130-17.pdf}
+	{https://academic.oup.com/ptps/article-pdf/doi/10.1143/PTPS.130.17/5213518/130-17.pdf}
+	\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Sekimoto}(2010)}]{SekimotoBook}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {K.}~\bibnamefont
+			{Sekimoto}},\ }\href {https://link.springer.com/} {\emph {\bibinfo {title}
+			{Stochastic energetics}}}\ (\bibinfo  {publisher} {Springer-Verlag, Berlin
+		Heidelberg},\ \bibinfo {year} {2010})\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Jarzynski}(1997)}]{Jarzynski1997}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {C.}~\bibnamefont
+			{Jarzynski}},\ }\bibfield  {title} {\bibinfo {title} {Nonequilibrium equality
+			for free energy differences},\ }\href
+	{https://doi.org/10.1103/PhysRevLett.78.2690} {\bibfield  {journal} {\bibinfo
+			{journal} {Phys. Rev. Lett.}\ }\textbf {\bibinfo {volume} {78}},\ \bibinfo
+		{pages} {2690} (\bibinfo {year} {1997})}\BibitemShut {NoStop}%
+	\bibitem [{Note4()}]{Note4}%
+	\BibitemOpen
+	\bibinfo {note} {The Second Law generalized to transformations between
+		non-equilibrium states reads in general $\Delta W \geq \Delta F + k_B T
+		\Delta I$ where $\Delta F$ and $\Delta I$ corresponds to the difference in
+		equilibrium free energy and KL-divergence between the final and initial
+		states \cite {esposito_second_2011}. For information engines the measurement
+		induces an initial non-equilibrium state, while the feedback action usually
+		returns the system to equilibrium. In that case $\Delta I = I(t_f) - I(t_i) =
+		-I(t_i)$ and we obtain $\Delta W \geq \Delta F - k_B T I(t_i)$ as is used in
+		the main text in most of the literature.}\BibitemShut {Stop}%
+	\bibitem [{Note5()}]{Note5}%
+	\BibitemOpen
+	\bibinfo {note} {For a Szil\'ard engine operating on a box of length $L = 1$
+		we have explicitly $\rho _{\protect \rm eq}(x) = 1$ on $x \in [0, 1]$. The
+		measurement can have two outcomes: either left (l) with $\rho (x|l) = 2$ on
+		$x \in [0, \protect \frac {1}{2}]$ or right (r) with $\rho (x|r) = 2$ on $x
+		\in [\protect \frac {1}{2}, 1]$. The information reads $I = \DOTSB \sum@
+		\slimits@ _m p(m) D_{\protect \rm KL}(\rho (x|m)||\rho _{\protect \rm
+			eq}(x))dx$. In the case where both outcomes are equiprobable $p(l) = p(r) =
+		1/2$ one gets $I = \protect \frac {1}{2} \DOTSI \intop \ilimits@ _0^{1/2} 2
+		\ln (2) dx + \protect \frac {1}{2} \DOTSI \intop \ilimits@ _{1/2}^2 2 \ln (2)
+		dx = \ln (2)$ and hence $W^{\protect \rm out} = k_B T \ln (2)$.}\BibitemShut
+	{Stop}%
+	\bibitem [{\citenamefont {Koski}\ \emph
+		{et~al.}(2014{\natexlab{b}})\citenamefont {Koski}, \citenamefont {Maisi},
+		\citenamefont {Sagawa},\ and\ \citenamefont {Pekola}}]{KoskiMutual2024}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.~V.}\ \bibnamefont
+			{Koski}}, \bibinfo {author} {\bibfnamefont {V.~F.}\ \bibnamefont {Maisi}},
+		\bibinfo {author} {\bibfnamefont {T.}~\bibnamefont {Sagawa}},\ and\ \bibinfo
+		{author} {\bibfnamefont {J.~P.}\ \bibnamefont {Pekola}},\ }\bibfield  {title}
+	{\bibinfo {title} {Experimental observation of the role of mutual information
+			in the nonequilibrium dynamics of a maxwell demon},\ }\href
+	{https://doi.org/10.1103/PhysRevLett.113.030601} {\bibfield  {journal}
+		{\bibinfo  {journal} {Phys. Rev. Lett.}\ }\textbf {\bibinfo {volume} {113}},\
+		\bibinfo {pages} {030601} (\bibinfo {year} {2014}{\natexlab{b}})}\BibitemShut
+	{NoStop}%
+	\bibitem [{\citenamefont {Sagawa}\ and\ \citenamefont
+		{Ueda}(2010{\natexlab{b}})}]{Sagawa2010}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.}~\bibnamefont
+			{Sagawa}}\ and\ \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Ueda}},\
+	}\bibfield  {title} {\bibinfo {title} {Generalized jarzynski equality under
+			nonequilibrium feedback control},\ }\href
+	{https://doi.org/10.1103/PhysRevLett.104.090602} {\bibfield  {journal}
+		{\bibinfo  {journal} {Phys. Rev. Lett.}\ }\textbf {\bibinfo {volume} {104}},\
+		\bibinfo {pages} {090602} (\bibinfo {year} {2010}{\natexlab{b}})}\BibitemShut
+	{NoStop}%
+	\bibitem [{\citenamefont {Serreli}\ \emph {et~al.}(2007)\citenamefont
+		{Serreli}, \citenamefont {Lee}, \citenamefont {Kay},\ and\ \citenamefont
+		{Leigh}}]{serreli_molecular_2007}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {V.}~\bibnamefont
+			{Serreli}}, \bibinfo {author} {\bibfnamefont {C.-F.}\ \bibnamefont {Lee}},
+		\bibinfo {author} {\bibfnamefont {E.~R.}\ \bibnamefont {Kay}},\ and\ \bibinfo
+		{author} {\bibfnamefont {D.~A.}\ \bibnamefont {Leigh}},\ }\bibfield  {title}
+	{\bibinfo {title} {A molecular information ratchet},\ }\href
+	{https://doi.org/10.1038/nature05452} {\bibfield  {journal} {\bibinfo
+			{journal} {Nature}\ }\textbf {\bibinfo {volume} {445}},\ \bibinfo {pages}
+		{523} (\bibinfo {year} {2007})},\ \bibinfo {note} {number: 7127 Publisher:
+		Nature Publishing Group}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Raizen}(2009)}]{raizen_comprehensive_2009}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {M.~G.}\ \bibnamefont
+			{Raizen}},\ }\bibfield  {title} {\bibinfo {title} {Comprehensive {Control} of
+			{Atomic} {Motion}},\ }\href {https://doi.org/10.1126/science.1171506}
+	{\bibfield  {journal} {\bibinfo  {journal} {Science}\ }\textbf {\bibinfo
+			{volume} {324}},\ \bibinfo {pages} {1403} (\bibinfo {year} {2009})},\
+	\bibinfo {note} {publisher: American Association for the Advancement of
+		Science}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Puglisi}\ \emph {et~al.}(2012)\citenamefont
+		{Puglisi}, \citenamefont {Gnoli}, \citenamefont {Gradenigo}, \citenamefont
+		{Sarracino},\ and\ \citenamefont {Villamaina}}]{puglisi2012structure}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+			{Puglisi}}, \bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Gnoli}},
+		\bibinfo {author} {\bibfnamefont {G.}~\bibnamefont {Gradenigo}}, \bibinfo
+		{author} {\bibfnamefont {A.}~\bibnamefont {Sarracino}},\ and\ \bibinfo
+		{author} {\bibfnamefont {D.}~\bibnamefont {Villamaina}},\ }\bibfield  {title}
+	{\bibinfo {title} {Structure factors in granular experiments with homogeneous
+			fluidization},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal}
+			{The Journal of chemical physics}\ }\textbf {\bibinfo {volume} {136}}
+		(\bibinfo {year} {2012})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Gnoli}\ \emph {et~al.}(2013)\citenamefont {Gnoli},
+		\citenamefont {Petri}, \citenamefont {Dalton}, \citenamefont {Pontuale},
+		\citenamefont {Gradenigo}, \citenamefont {Sarracino},\ and\ \citenamefont
+		{Puglisi}}]{gnoli_brownian_2013}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+			{Gnoli}}, \bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Petri}},
+		\bibinfo {author} {\bibfnamefont {F.}~\bibnamefont {Dalton}}, \bibinfo
+		{author} {\bibfnamefont {G.}~\bibnamefont {Pontuale}}, \bibinfo {author}
+		{\bibfnamefont {G.}~\bibnamefont {Gradenigo}}, \bibinfo {author}
+		{\bibfnamefont {A.}~\bibnamefont {Sarracino}},\ and\ \bibinfo {author}
+		{\bibfnamefont {A.}~\bibnamefont {Puglisi}},\ }\bibfield  {title} {\bibinfo
+		{title} {Brownian ratchet in a thermal bath driven by coulomb friction},\
+	}\href {https://doi.org/10.1103/PhysRevLett.110.120601} {\bibfield  {journal}
+		{\bibinfo  {journal} {Physical Review Letters}\ }\textbf {\bibinfo {volume}
+			{110}},\ \bibinfo {pages} {120601} (\bibinfo {year} {2013})}\BibitemShut
+	{NoStop}%
+	\bibitem [{\citenamefont {Deblais}\ \emph {et~al.}(2018)\citenamefont
+		{Deblais}, \citenamefont {Barois}, \citenamefont {Guerin}, \citenamefont
+		{Delville}, \citenamefont {Vaudaine}, \citenamefont {Lintuvuori},
+		\citenamefont {Boudet}, \citenamefont {Baret},\ and\ \citenamefont
+		{Kellay}}]{deblais2018boundaries}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+			{Deblais}}, \bibinfo {author} {\bibfnamefont {T.}~\bibnamefont {Barois}},
+		\bibinfo {author} {\bibfnamefont {T.}~\bibnamefont {Guerin}}, \bibinfo
+		{author} {\bibfnamefont {P.-H.}\ \bibnamefont {Delville}}, \bibinfo {author}
+		{\bibfnamefont {R.}~\bibnamefont {Vaudaine}}, \bibinfo {author}
+		{\bibfnamefont {J.~S.}\ \bibnamefont {Lintuvuori}}, \bibinfo {author}
+		{\bibfnamefont {J.-F.}\ \bibnamefont {Boudet}}, \bibinfo {author}
+		{\bibfnamefont {J.-C.}\ \bibnamefont {Baret}},\ and\ \bibinfo {author}
+		{\bibfnamefont {H.}~\bibnamefont {Kellay}},\ }\bibfield  {title} {\bibinfo
+		{title} {Boundaries control collective dynamics of inertial self-propelled
+			robots},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Physical
+				review letters}\ }\textbf {\bibinfo {volume} {120}},\ \bibinfo {pages}
+		{188002} (\bibinfo {year} {2018})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Giomi}\ \emph {et~al.}(2013)\citenamefont {Giomi},
+		\citenamefont {Hawley-Weld},\ and\ \citenamefont
+		{Mahadevan}}]{giomi2013swarming}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {L.}~\bibnamefont
+			{Giomi}}, \bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Hawley-Weld}},\
+		and\ \bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Mahadevan}},\
+	}\bibfield  {title} {\bibinfo {title} {Swarming, swirling and stasis in
+			sequestered bristle-bots},\ }\href@noop {} {\bibfield  {journal} {\bibinfo
+			{journal} {Proceedings of the Royal Society A: Mathematical, Physical and
+				Engineering Sciences}\ }\textbf {\bibinfo {volume} {469}},\ \bibinfo {pages}
+		{20120637} (\bibinfo {year} {2013})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Ginelli}\ \emph {et~al.}(2010)\citenamefont
+		{Ginelli}, \citenamefont {Peruani}, \citenamefont {B{\"a}r},\ and\
+		\citenamefont {Chat{\'e}}}]{ginelli2010large}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {F.}~\bibnamefont
+			{Ginelli}}, \bibinfo {author} {\bibfnamefont {F.}~\bibnamefont {Peruani}},
+		\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {B{\"a}r}},\ and\ \bibinfo
+		{author} {\bibfnamefont {H.}~\bibnamefont {Chat{\'e}}},\ }\bibfield  {title}
+	{\bibinfo {title} {Large-scale collective properties of self-propelled
+			rods},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Physical
+				review letters}\ }\textbf {\bibinfo {volume} {104}},\ \bibinfo {pages}
+		{184502} (\bibinfo {year} {2010})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Horowitz}\ and\ \citenamefont
+		{Parrondo}(2013)}]{horowitz2013optimizing}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.~M.}\ \bibnamefont
+			{Horowitz}}\ and\ \bibinfo {author} {\bibfnamefont {J.~M.}\ \bibnamefont
+			{Parrondo}},\ }\bibfield  {title} {\bibinfo {title} {Optimizing non-ergodic
+			feedback engines},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal}
+			{arXiv preprint arXiv:1305.6281}\ } (\bibinfo {year} {2013})}\BibitemShut
+	{NoStop}%
+	\bibitem [{\citenamefont {Horowitz}\ and\ \citenamefont
+		{Vaikuntanathan}(2010{\natexlab{a}})}]{horowitz2010nonequilibrium}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.~M.}\ \bibnamefont
+			{Horowitz}}\ and\ \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont
+			{Vaikuntanathan}},\ }\bibfield  {title} {\bibinfo {title} {Nonequilibrium
+			detailed fluctuation theorem for repeated discrete feedback},\ }\href@noop {}
+	{\bibfield  {journal} {\bibinfo  {journal} {Physical Review E—Statistical,
+				Nonlinear, and Soft Matter Physics}\ }\textbf {\bibinfo {volume} {82}},\
+		\bibinfo {pages} {061120} (\bibinfo {year} {2010}{\natexlab{a}})}\BibitemShut
+	{NoStop}%
+	\bibitem [{\citenamefont {Horowitz}\ and\ \citenamefont
+		{Vaikuntanathan}(2010{\natexlab{b}})}]{Horowitz_2010}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.~M.}\ \bibnamefont
+			{Horowitz}}\ and\ \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont
+			{Vaikuntanathan}},\ }\bibfield  {title} {\bibinfo {title} {Nonequilibrium
+			detailed fluctuation theorem for repeated discrete feedback},\ }\bibfield
+	{journal} {\bibinfo  {journal} {Physical Review E}\ }\textbf {\bibinfo
+		{volume} {82}},\ \href {https://doi.org/10.1103/physreve.82.061120}
+	{10.1103/physreve.82.061120} (\bibinfo {year} {2010}{\natexlab{b}}),\
+	\bibinfo {note} {publisher: American Physical Society (APS)}\BibitemShut
+	{NoStop}%
+	\bibitem [{\citenamefont {Horowitz}\ and\ \citenamefont
+		{Parrondo}(2011)}]{horowitz2011thermodynamic}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.~M.}\ \bibnamefont
+			{Horowitz}}\ and\ \bibinfo {author} {\bibfnamefont {J.~M.}\ \bibnamefont
+			{Parrondo}},\ }\bibfield  {title} {\bibinfo {title} {Thermodynamic
+			reversibility in feedback processes},\ }\href@noop {} {\bibfield  {journal}
+		{\bibinfo  {journal} {Europhysics Letters}\ }\textbf {\bibinfo {volume}
+			{95}},\ \bibinfo {pages} {10005} (\bibinfo {year} {2011})}\BibitemShut
+	{NoStop}%
+	\bibitem [{\citenamefont {Schmiedl}\ and\ \citenamefont
+		{Seifert}(2007{\natexlab{b}})}]{schmiedl2007efficiency}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.}~\bibnamefont
+			{Schmiedl}}\ and\ \bibinfo {author} {\bibfnamefont {U.}~\bibnamefont
+			{Seifert}},\ }\bibfield  {title} {\bibinfo {title} {Efficiency at maximum
+			power: An analytically solvable model for stochastic heat engines},\
+	}\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Europhysics
+				letters}\ }\textbf {\bibinfo {volume} {81}},\ \bibinfo {pages} {20003}
+		(\bibinfo {year} {2007}{\natexlab{b}})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Feynman}\ \emph {et~al.}(1965)\citenamefont
+		{Feynman}, \citenamefont {Leighton}, \citenamefont {Sands},\ and\
+		\citenamefont {Hafner}}]{feynman1965feynman}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {R.~P.}\ \bibnamefont
+			{Feynman}}, \bibinfo {author} {\bibfnamefont {R.~B.}\ \bibnamefont
+			{Leighton}}, \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Sands}},\
+		and\ \bibinfo {author} {\bibfnamefont {E.~M.}\ \bibnamefont {Hafner}},\
+	}\bibfield  {title} {\bibinfo {title} {The feynman lectures on physics; vol.
+			i, ch. 46},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal}
+			{American Journal of Physics}\ }\textbf {\bibinfo {volume} {33}},\ \bibinfo
+		{pages} {750} (\bibinfo {year} {1965})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Bang}\ \emph {et~al.}(2018)\citenamefont {Bang},
+		\citenamefont {Pan}, \citenamefont {Hoang}, \citenamefont {Ahn},
+		\citenamefont {Jarzynski}, \citenamefont {Quan},\ and\ \citenamefont
+		{Li}}]{bang2018experimental}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont
+			{Bang}}, \bibinfo {author} {\bibfnamefont {R.}~\bibnamefont {Pan}}, \bibinfo
+		{author} {\bibfnamefont {T.~M.}\ \bibnamefont {Hoang}}, \bibinfo {author}
+		{\bibfnamefont {J.}~\bibnamefont {Ahn}}, \bibinfo {author} {\bibfnamefont
+			{C.}~\bibnamefont {Jarzynski}}, \bibinfo {author} {\bibfnamefont
+			{H.}~\bibnamefont {Quan}},\ and\ \bibinfo {author} {\bibfnamefont
+			{T.}~\bibnamefont {Li}},\ }\bibfield  {title} {\bibinfo {title} {Experimental
+			realization of feynman’s ratchet},\ }\href@noop {} {\bibfield  {journal}
+		{\bibinfo  {journal} {New Journal of Physics}\ }\textbf {\bibinfo {volume}
+			{20}},\ \bibinfo {pages} {103032} (\bibinfo {year} {2018})}\BibitemShut
+	{NoStop}%
+	\bibitem [{\citenamefont {Vicsek}\ \emph {et~al.}(1995)\citenamefont {Vicsek},
+		\citenamefont {Czir{\'o}k}, \citenamefont {Ben-Jacob}, \citenamefont
+		{Cohen},\ and\ \citenamefont {Shochet}}]{vicsek1995novel}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.}~\bibnamefont
+			{Vicsek}}, \bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Czir{\'o}k}},
+		\bibinfo {author} {\bibfnamefont {E.}~\bibnamefont {Ben-Jacob}}, \bibinfo
+		{author} {\bibfnamefont {I.}~\bibnamefont {Cohen}},\ and\ \bibinfo {author}
+		{\bibfnamefont {O.}~\bibnamefont {Shochet}},\ }\bibfield  {title} {\bibinfo
+		{title} {Novel type of phase transition in a system of self-driven
+			particles},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal}
+			{Physical review letters}\ }\textbf {\bibinfo {volume} {75}},\ \bibinfo
+		{pages} {1226} (\bibinfo {year} {1995})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Solon}(2024)}]{solon2024thirty}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+			{Solon}},\ }\bibfield  {title} {\bibinfo {title} {Thirty years of surprises
+			about collective motion},\ }\href@noop {} {\bibfield  {journal} {\bibinfo
+			{journal} {Europhysics News}\ }\textbf {\bibinfo {volume} {55}},\ \bibinfo
+		{pages} {28} (\bibinfo {year} {2024})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Ramaswamy}(2010)}]{ramaswamy2010mechanics}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {S.}~\bibnamefont
+			{Ramaswamy}},\ }\bibfield  {title} {\bibinfo {title} {The mechanics and
+			statistics of active matter},\ }\href@noop {} {\bibfield  {journal} {\bibinfo
+			{journal} {Annu. Rev. Condens. Matter Phys.}\ }\textbf {\bibinfo {volume}
+			{1}},\ \bibinfo {pages} {323} (\bibinfo {year} {2010})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Fodor}\ and\ \citenamefont
+		{Marchetti}(2018)}]{fodor2018statistical}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {{\'E}.}~\bibnamefont
+			{Fodor}}\ and\ \bibinfo {author} {\bibfnamefont {M.~C.}\ \bibnamefont
+			{Marchetti}},\ }\bibfield  {title} {\bibinfo {title} {The statistical physics
+			of active matter: From self-catalytic colloids to living cells},\ }\href@noop
+	{} {\bibfield  {journal} {\bibinfo  {journal} {Physica A: Statistical
+				Mechanics and its Applications}\ }\textbf {\bibinfo {volume} {504}},\
+		\bibinfo {pages} {106} (\bibinfo {year} {2018})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Fodor}\ \emph {et~al.}(2016)\citenamefont {Fodor},
+		\citenamefont {Nardini}, \citenamefont {Cates}, \citenamefont {Tailleur},
+		\citenamefont {Visco},\ and\ \citenamefont {Van~Wijland}}]{fodor2016far}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {{\'E}.}~\bibnamefont
+			{Fodor}}, \bibinfo {author} {\bibfnamefont {C.}~\bibnamefont {Nardini}},
+		\bibinfo {author} {\bibfnamefont {M.~E.}\ \bibnamefont {Cates}}, \bibinfo
+		{author} {\bibfnamefont {J.}~\bibnamefont {Tailleur}}, \bibinfo {author}
+		{\bibfnamefont {P.}~\bibnamefont {Visco}},\ and\ \bibinfo {author}
+		{\bibfnamefont {F.}~\bibnamefont {Van~Wijland}},\ }\bibfield  {title}
+	{\bibinfo {title} {How far from equilibrium is active matter?},\ }\href@noop
+	{} {\bibfield  {journal} {\bibinfo  {journal} {Physical review letters}\
+		}\textbf {\bibinfo {volume} {117}},\ \bibinfo {pages} {038103} (\bibinfo
+		{year} {2016})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Albay}\ \emph {et~al.}(2023)\citenamefont {Albay},
+		\citenamefont {Zhou}, \citenamefont {Chang}, \citenamefont {Chen},
+		\citenamefont {Lee}, \citenamefont {Chang},\ and\ \citenamefont
+		{Jun}}]{Albay2O23}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.~A.~C.}\
+			\bibnamefont {Albay}}, \bibinfo {author} {\bibfnamefont {Z.-Y.}\ \bibnamefont
+			{Zhou}}, \bibinfo {author} {\bibfnamefont {C.-H.}\ \bibnamefont {Chang}},
+		\bibinfo {author} {\bibfnamefont {H.-Y.}\ \bibnamefont {Chen}}, \bibinfo
+		{author} {\bibfnamefont {J.~S.}\ \bibnamefont {Lee}}, \bibinfo {author}
+		{\bibfnamefont {C.-H.}\ \bibnamefont {Chang}},\ and\ \bibinfo {author}
+		{\bibfnamefont {Y.}~\bibnamefont {Jun}},\ }\bibfield  {title} {\bibinfo
+		{title} {Colloidal heat engine driven by engineered active noise},\ }\href
+	{https://doi.org/10.1103/PhysRevResearch.5.033208} {\bibfield  {journal}
+		{\bibinfo  {journal} {Phys. Rev. Res.}\ }\textbf {\bibinfo {volume} {5}},\
+		\bibinfo {pages} {033208} (\bibinfo {year} {2023})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Di~Leonardo}\ \emph {et~al.}(2010)\citenamefont
+		{Di~Leonardo}, \citenamefont {Angelani}, \citenamefont {Dell'arciprete},
+		\citenamefont {Ruocco}, \citenamefont {Iebba}, \citenamefont {Schippa},
+		\citenamefont {Conte}, \citenamefont {Mecarini}, \citenamefont {De~Angelis},\
+		and\ \citenamefont {Di~Fabrizio}}]{di_leonardo_bacterial_2010}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {R.}~\bibnamefont
+			{Di~Leonardo}}, \bibinfo {author} {\bibfnamefont {L.}~\bibnamefont
+			{Angelani}}, \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont
+			{Dell'arciprete}}, \bibinfo {author} {\bibfnamefont {G.}~\bibnamefont
+			{Ruocco}}, \bibinfo {author} {\bibfnamefont {V.}~\bibnamefont {Iebba}},
+		\bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Schippa}}, \bibinfo
+		{author} {\bibfnamefont {M.~P.}\ \bibnamefont {Conte}}, \bibinfo {author}
+		{\bibfnamefont {F.}~\bibnamefont {Mecarini}}, \bibinfo {author}
+		{\bibfnamefont {F.}~\bibnamefont {De~Angelis}},\ and\ \bibinfo {author}
+		{\bibfnamefont {E.}~\bibnamefont {Di~Fabrizio}},\ }\bibfield  {title}
+	{\bibinfo {title} {Bacterial ratchet motors.},\ }\href
+	{https://doi.org/10.1073/pnas.0910426107} {\bibfield  {journal} {\bibinfo
+			{journal} {Proceedings of the National Academy of Sciences of the United
+				States of America}\ }\textbf {\bibinfo {volume} {107}},\ \bibinfo {pages}
+		{9541} (\bibinfo {year} {2010})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Goerlich}\ \emph {et~al.}(2022)\citenamefont
+		{Goerlich}, \citenamefont {Pires}, \citenamefont {Manfredi}, \citenamefont
+		{Hervieux},\ and\ \citenamefont {Genet}}]{Goerlich2022}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {R.}~\bibnamefont
+			{Goerlich}}, \bibinfo {author} {\bibfnamefont {L.~B.}\ \bibnamefont {Pires}},
+		\bibinfo {author} {\bibfnamefont {G.}~\bibnamefont {Manfredi}}, \bibinfo
+		{author} {\bibfnamefont {P.-A.}\ \bibnamefont {Hervieux}},\ and\ \bibinfo
+		{author} {\bibfnamefont {C.}~\bibnamefont {Genet}},\ }\bibfield  {title}
+	{\bibinfo {title} {Harvesting information to control nonequilibrium states of
+			active matter},\ }\href {https://doi.org/10.1103/PhysRevE.106.054617}
+	{\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. E}\ }\textbf {\bibinfo
+			{volume} {106}},\ \bibinfo {pages} {054617} (\bibinfo {year}
+		{2022})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Holubec}\ \emph {et~al.}(2020)\citenamefont
+		{Holubec}, \citenamefont {Steffenoni}, \citenamefont {Falasco},\ and\
+		\citenamefont {Kroy}}]{holubec2020active}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {V.}~\bibnamefont
+			{Holubec}}, \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Steffenoni}},
+		\bibinfo {author} {\bibfnamefont {G.}~\bibnamefont {Falasco}},\ and\ \bibinfo
+		{author} {\bibfnamefont {K.}~\bibnamefont {Kroy}},\ }\bibfield  {title}
+	{\bibinfo {title} {Active brownian heat engines},\ }\href@noop {} {\bibfield
+		{journal} {\bibinfo  {journal} {Physical Review Research}\ }\textbf {\bibinfo
+			{volume} {2}},\ \bibinfo {pages} {043262} (\bibinfo {year}
+		{2020})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Martínez}\ \emph {et~al.}(2017)\citenamefont
+		{Martínez}, \citenamefont {Roldán}, \citenamefont {Dinis},\ and\
+		\citenamefont {Rica}}]{martinez_colloidal_2017}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {I.~A.}\ \bibnamefont
+			{Martínez}}, \bibinfo {author} {\bibfnamefont {E.}~\bibnamefont {Roldán}},
+		\bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Dinis}},\ and\ \bibinfo
+		{author} {\bibfnamefont {R.~A.}\ \bibnamefont {Rica}},\ }\bibfield  {title}
+	{\bibinfo {title} {Colloidal heat engines: a review},\ }\href
+	{https://doi.org/10.1039/C6SM00923A} {\bibfield  {journal} {\bibinfo
+			{journal} {Soft Matter}\ }\textbf {\bibinfo {volume} {13}},\ \bibinfo {pages}
+		{22} (\bibinfo {year} {2017})},\ \bibinfo {note} {publisher: The Royal
+		Society of Chemistry}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Paneru}\ \emph {et~al.}(2022)\citenamefont {Paneru},
+		\citenamefont {Dutta},\ and\ \citenamefont {Pak}}]{paneru_colossal_2022}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {G.}~\bibnamefont
+			{Paneru}}, \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Dutta}},\ and\
+		\bibinfo {author} {\bibfnamefont {H.~K.}\ \bibnamefont {Pak}},\ }\bibfield
+	{title} {\bibinfo {title} {Colossal {Power} {Extraction} from {Active}
+			{Cyclic} {Brownian} {Information} {Engines}},\ }\href
+	{https://doi.org/10.1021/acs.jpclett.2c01736} {\bibfield  {journal} {\bibinfo
+			{journal} {The Journal of Physical Chemistry Letters}\ }\textbf {\bibinfo
+			{volume} {13}},\ \bibinfo {pages} {6912} (\bibinfo {year} {2022})},\ \bibinfo
+	{note} {publisher: American Chemical Society}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Malgaretti}\ and\ \citenamefont
+		{Stark}(2022)}]{malgaretti_szilard_2022}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {P.}~\bibnamefont
+			{Malgaretti}}\ and\ \bibinfo {author} {\bibfnamefont {H.}~\bibnamefont
+			{Stark}},\ }\bibfield  {title} {\bibinfo {title} {Szilard {Engines} and
+			{Information}-{Based} {Work} {Extraction} for {Active} {Systems}},\ }\href
+	{https://doi.org/10.1103/PhysRevLett.129.228005} {\bibfield  {journal}
+		{\bibinfo  {journal} {Physical Review Letters}\ }\textbf {\bibinfo {volume}
+			{129}},\ \bibinfo {pages} {228005} (\bibinfo {year} {2022})}\BibitemShut
+	{NoStop}%
+	\bibitem [{\citenamefont {Cocconi}\ and\ \citenamefont
+		{Chen}(2024)}]{cocconi_efficiency_2024}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {L.}~\bibnamefont
+			{Cocconi}}\ and\ \bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Chen}},\
+	}\bibfield  {title} {\bibinfo {title} {Efficiency of an autonomous, dynamic
+			information engine operating on a single active particle},\ }\href
+	{https://doi.org/10.1103/PhysRevE.110.014602} {\bibfield  {journal} {\bibinfo
+			{journal} {Phys. Rev. E}\ }\textbf {\bibinfo {volume} {110}},\ \bibinfo
+		{pages} {014602} (\bibinfo {year} {2024})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Rafeek}\ and\ \citenamefont
+		{Mondal}(2024)}]{rafeek2024active}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {R.}~\bibnamefont
+			{Rafeek}}\ and\ \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont
+			{Mondal}},\ }\bibfield  {title} {\bibinfo {title} {Active brownian
+			information engine: Self-propulsion induced colossal performance},\
+	}\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {The Journal of
+				Chemical Physics}\ }\textbf {\bibinfo {volume} {161}} (\bibinfo {year}
+		{2024})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Garcia-Millan}\ \emph {et~al.}(2024)\citenamefont
+		{Garcia-Millan}, \citenamefont {Sch{\"u}ttler}, \citenamefont {Cates},\ and\
+		\citenamefont {Loos}}]{garcia2024optimal}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {R.}~\bibnamefont
+			{Garcia-Millan}}, \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont
+			{Sch{\"u}ttler}}, \bibinfo {author} {\bibfnamefont {M.~E.}\ \bibnamefont
+			{Cates}},\ and\ \bibinfo {author} {\bibfnamefont {S.~A.}\ \bibnamefont
+			{Loos}},\ }\bibfield  {title} {\bibinfo {title} {Optimal closed-loop control
+			of active particles and a minimal information engine},\ }\href@noop {}
+	{\bibfield  {journal} {\bibinfo  {journal} {arXiv preprint arXiv:2407.18542}\
+		} (\bibinfo {year} {2024})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Ariga}\ \emph {et~al.}(2021)\citenamefont {Ariga},
+		\citenamefont {Tateishi}, \citenamefont {Tomishige},\ and\ \citenamefont
+		{Mizuno}}]{ariga2021noise}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.}~\bibnamefont
+			{Ariga}}, \bibinfo {author} {\bibfnamefont {K.}~\bibnamefont {Tateishi}},
+		\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Tomishige}},\ and\
+		\bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {Mizuno}},\ }\bibfield
+	{title} {\bibinfo {title} {Noise-induced acceleration of single molecule
+			kinesin-1},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal}
+			{Physical review letters}\ }\textbf {\bibinfo {volume} {127}},\ \bibinfo
+		{pages} {178101} (\bibinfo {year} {2021})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Francois}\ \emph {et~al.}(2020)\citenamefont
+		{Francois}, \citenamefont {Xia}, \citenamefont {Punzmann},\ and\
+		\citenamefont {Shats}}]{francois2020nonequilibrium}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {N.}~\bibnamefont
+			{Francois}}, \bibinfo {author} {\bibfnamefont {H.}~\bibnamefont {Xia}},
+		\bibinfo {author} {\bibfnamefont {H.}~\bibnamefont {Punzmann}},\ and\
+		\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Shats}},\ }\bibfield
+	{title} {\bibinfo {title} {Nonequilibrium thermodynamics of turbulence-driven
+			rotors},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Physical
+				Review Letters}\ }\textbf {\bibinfo {volume} {124}},\ \bibinfo {pages}
+		{254501} (\bibinfo {year} {2020})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Deseigne}\ \emph {et~al.}(2010)\citenamefont
+		{Deseigne}, \citenamefont {Dauchot},\ and\ \citenamefont
+		{Chat{\'e}}}]{deseigne2010collective}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont
+			{Deseigne}}, \bibinfo {author} {\bibfnamefont {O.}~\bibnamefont {Dauchot}},\
+		and\ \bibinfo {author} {\bibfnamefont {H.}~\bibnamefont {Chat{\'e}}},\
+	}\bibfield  {title} {\bibinfo {title} {Collective motion of vibrated polar
+			disks},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Physical
+				review letters}\ }\textbf {\bibinfo {volume} {105}},\ \bibinfo {pages}
+		{098001} (\bibinfo {year} {2010})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Liebchen}\ and\ \citenamefont
+		{Levis}(2017)}]{liebchen2017collective}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {B.}~\bibnamefont
+			{Liebchen}}\ and\ \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont
+			{Levis}},\ }\bibfield  {title} {\bibinfo {title} {Collective behavior of
+			chiral active matter: Pattern formation and enhanced flocking},\ }\href@noop
+	{} {\bibfield  {journal} {\bibinfo  {journal} {Physical review letters}\
+		}\textbf {\bibinfo {volume} {119}},\ \bibinfo {pages} {058002} (\bibinfo
+		{year} {2017})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Liebchen}\ and\ \citenamefont
+		{Löwen}(2018)}]{liebchen2018synthetic}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {B.}~\bibnamefont
+			{Liebchen}}\ and\ \bibinfo {author} {\bibfnamefont {H.}~\bibnamefont
+			{Löwen}},\ }\bibfield  {title} {\bibinfo {title} {Synthetic chemotaxis and
+			collective behavior in active matter},\ }\href@noop {} {\bibfield  {journal}
+		{\bibinfo  {journal} {Accounts of chemical research}\ }\textbf {\bibinfo
+			{volume} {51}},\ \bibinfo {pages} {2982} (\bibinfo {year}
+		{2018})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Cates}\ and\ \citenamefont
+		{Tailleur}(2015)}]{cates2015motility}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {M.~E.}\ \bibnamefont
+			{Cates}}\ and\ \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont
+			{Tailleur}},\ }\bibfield  {title} {\bibinfo {title} {Motility-induced phase
+			separation},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal}
+			{Annu. Rev. Condens. Matter Phys.}\ }\textbf {\bibinfo {volume} {6}},\
+		\bibinfo {pages} {219} (\bibinfo {year} {2015})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Aranson}(2022)}]{aranson2022bacterial}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {I.~S.}\ \bibnamefont
+			{Aranson}},\ }\bibfield  {title} {\bibinfo {title} {Bacterial active
+			matter},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Reports
+				on Progress in Physics}\ }\textbf {\bibinfo {volume} {85}},\ \bibinfo {pages}
+		{076601} (\bibinfo {year} {2022})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Loos}\ and\ \citenamefont
+		{Klapp}(2020)}]{loos2020irreversibility}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {S.~A.}\ \bibnamefont
+			{Loos}}\ and\ \bibinfo {author} {\bibfnamefont {S.~H.}\ \bibnamefont
+			{Klapp}},\ }\bibfield  {title} {\bibinfo {title} {Irreversibility, heat and
+			information flows induced by non-reciprocal interactions},\ }\href@noop {}
+	{\bibfield  {journal} {\bibinfo  {journal} {New Journal of Physics}\ }\textbf
+		{\bibinfo {volume} {22}},\ \bibinfo {pages} {123051} (\bibinfo {year}
+		{2020})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Dinelli}\ \emph {et~al.}(2023)\citenamefont
+		{Dinelli}, \citenamefont {O’Byrne}, \citenamefont {Curatolo}, \citenamefont
+		{Zhao}, \citenamefont {Sollich},\ and\ \citenamefont
+		{Tailleur}}]{dinelli2023non}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+			{Dinelli}}, \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {O’Byrne}},
+		\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Curatolo}}, \bibinfo
+		{author} {\bibfnamefont {Y.}~\bibnamefont {Zhao}}, \bibinfo {author}
+		{\bibfnamefont {P.}~\bibnamefont {Sollich}},\ and\ \bibinfo {author}
+		{\bibfnamefont {J.}~\bibnamefont {Tailleur}},\ }\bibfield  {title} {\bibinfo
+		{title} {Non-reciprocity across scales in active mixtures},\ }\href@noop {}
+	{\bibfield  {journal} {\bibinfo  {journal} {Nature Communications}\ }\textbf
+		{\bibinfo {volume} {14}},\ \bibinfo {pages} {7035} (\bibinfo {year}
+		{2023})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Fruchart}\ \emph {et~al.}(2021)\citenamefont
+		{Fruchart}, \citenamefont {Hanai}, \citenamefont {Littlewood},\ and\
+		\citenamefont {Vitelli}}]{fruchart2021non}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont
+			{Fruchart}}, \bibinfo {author} {\bibfnamefont {R.}~\bibnamefont {Hanai}},
+		\bibinfo {author} {\bibfnamefont {P.~B.}\ \bibnamefont {Littlewood}},\ and\
+		\bibinfo {author} {\bibfnamefont {V.}~\bibnamefont {Vitelli}},\ }\bibfield
+	{title} {\bibinfo {title} {Non-reciprocal phase transitions},\ }\href@noop {}
+	{\bibfield  {journal} {\bibinfo  {journal} {Nature}\ }\textbf {\bibinfo
+			{volume} {592}},\ \bibinfo {pages} {363} (\bibinfo {year}
+		{2021})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Rondin}\ \emph {et~al.}(2017)\citenamefont {Rondin},
+		\citenamefont {Gieseler}, \citenamefont {Ricci}, \citenamefont {Quidant},
+		\citenamefont {Dellago},\ and\ \citenamefont {Novotny}}]{rondin2017direct}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {L.}~\bibnamefont
+			{Rondin}}, \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Gieseler}},
+		\bibinfo {author} {\bibfnamefont {F.}~\bibnamefont {Ricci}}, \bibinfo
+		{author} {\bibfnamefont {R.}~\bibnamefont {Quidant}}, \bibinfo {author}
+		{\bibfnamefont {C.}~\bibnamefont {Dellago}},\ and\ \bibinfo {author}
+		{\bibfnamefont {L.}~\bibnamefont {Novotny}},\ }\bibfield  {title} {\bibinfo
+		{title} {Direct measurement of kramers turnover with a levitated
+			nanoparticle},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal}
+			{Nature nanotechnology}\ }\textbf {\bibinfo {volume} {12}},\ \bibinfo {pages}
+		{1130} (\bibinfo {year} {2017})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Gonzalez-Ballestero}\ \emph
+		{et~al.}(2021)\citenamefont {Gonzalez-Ballestero}, \citenamefont
+		{Aspelmeyer}, \citenamefont {Novotny}, \citenamefont {Quidant},\ and\
+		\citenamefont {Romero-Isart}}]{gonzalez2021levitodynamics}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {C.}~\bibnamefont
+			{Gonzalez-Ballestero}}, \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont
+			{Aspelmeyer}}, \bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Novotny}},
+		\bibinfo {author} {\bibfnamefont {R.}~\bibnamefont {Quidant}},\ and\ \bibinfo
+		{author} {\bibfnamefont {O.}~\bibnamefont {Romero-Isart}},\ }\bibfield
+	{title} {\bibinfo {title} {Levitodynamics: Levitation and control of
+			microscopic objects in vacuum},\ }\href@noop {} {\bibfield  {journal}
+		{\bibinfo  {journal} {Science}\ }\textbf {\bibinfo {volume} {374}},\ \bibinfo
+		{pages} {eabg3027} (\bibinfo {year} {2021})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Piotrowski}\ \emph {et~al.}(2023)\citenamefont
+		{Piotrowski}, \citenamefont {Windey}, \citenamefont {Vijayan}, \citenamefont
+		{Gonzalez-Ballestero}, \citenamefont {de~los R{\'\i}os~Sommer}, \citenamefont
+		{Meyer}, \citenamefont {Quidant}, \citenamefont {Romero-Isart}, \citenamefont
+		{Reimann},\ and\ \citenamefont {Novotny}}]{piotrowski2023simultaneous}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont
+			{Piotrowski}}, \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {Windey}},
+		\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Vijayan}}, \bibinfo
+		{author} {\bibfnamefont {C.}~\bibnamefont {Gonzalez-Ballestero}}, \bibinfo
+		{author} {\bibfnamefont {A.}~\bibnamefont {de~los R{\'\i}os~Sommer}},
+		\bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Meyer}}, \bibinfo
+		{author} {\bibfnamefont {R.}~\bibnamefont {Quidant}}, \bibinfo {author}
+		{\bibfnamefont {O.}~\bibnamefont {Romero-Isart}}, \bibinfo {author}
+		{\bibfnamefont {R.}~\bibnamefont {Reimann}},\ and\ \bibinfo {author}
+		{\bibfnamefont {L.}~\bibnamefont {Novotny}},\ }\bibfield  {title} {\bibinfo
+		{title} {Simultaneous ground-state cooling of two mechanical modes of a
+			levitated nanoparticle},\ }\href@noop {} {\bibfield  {journal} {\bibinfo
+			{journal} {Nature Physics}\ }\textbf {\bibinfo {volume} {19}},\ \bibinfo
+		{pages} {1009} (\bibinfo {year} {2023})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Dago}\ \emph {et~al.}(2021)\citenamefont {Dago},
+		\citenamefont {Pereda}, \citenamefont {Barros}, \citenamefont {Ciliberto},\
+		and\ \citenamefont {Bellon}}]{dago2021information}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {S.}~\bibnamefont
+			{Dago}}, \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Pereda}},
+		\bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Barros}}, \bibinfo
+		{author} {\bibfnamefont {S.}~\bibnamefont {Ciliberto}},\ and\ \bibinfo
+		{author} {\bibfnamefont {L.}~\bibnamefont {Bellon}},\ }\bibfield  {title}
+	{\bibinfo {title} {Information and thermodynamics: Fast and precise approach
+			to landauer’s bound in an underdamped micromechanical oscillator},\
+	}\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Physical Review
+				Letters}\ }\textbf {\bibinfo {volume} {126}},\ \bibinfo {pages} {170601}
+		(\bibinfo {year} {2021})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Dago}\ and\ \citenamefont
+		{Bellon}(2022)}]{dago2022dynamics}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {S.}~\bibnamefont
+			{Dago}}\ and\ \bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Bellon}},\
+	}\bibfield  {title} {\bibinfo {title} {Dynamics of information erasure and
+			extension of landauer’s bound to fast processes},\ }\href@noop {}
+	{\bibfield  {journal} {\bibinfo  {journal} {Physical Review Letters}\
+		}\textbf {\bibinfo {volume} {128}},\ \bibinfo {pages} {070604} (\bibinfo
+		{year} {2022})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Dago}\ \emph {et~al.}(2023)\citenamefont {Dago},
+		\citenamefont {Ciliberto},\ and\ \citenamefont {Bellon}}]{dago2023adiabatic}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {S.}~\bibnamefont
+			{Dago}}, \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Ciliberto}},\
+		and\ \bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Bellon}},\
+	}\bibfield  {title} {\bibinfo {title} {Adiabatic computing for optimal
+			thermodynamic efficiency of information processing},\ }\href@noop {}
+	{\bibfield  {journal} {\bibinfo  {journal} {Proceedings of the National
+				Academy of Sciences}\ }\textbf {\bibinfo {volume} {120}},\ \bibinfo {pages}
+		{e2301742120} (\bibinfo {year} {2023})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Barros}\ \emph
+		{et~al.}(2024{\natexlab{a}})\citenamefont {Barros}, \citenamefont
+		{Ciliberto},\ and\ \citenamefont {Bellon}}]{barros2024probabilistic}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {N.}~\bibnamefont
+			{Barros}}, \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Ciliberto}},\
+		and\ \bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Bellon}},\
+	}\bibfield  {title} {\bibinfo {title} {Probabilistic work extraction on a
+			classical oscillator beyond the second law},\ }\href@noop {} {\bibfield
+		{journal} {\bibinfo  {journal} {Physical Review Letters}\ }\textbf {\bibinfo
+			{volume} {133}},\ \bibinfo {pages} {057101} (\bibinfo {year}
+		{2024}{\natexlab{a}})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Rademacher}\ \emph {et~al.}(2022)\citenamefont
+		{Rademacher}, \citenamefont {Konopik}, \citenamefont {Debiossac},
+		\citenamefont {Grass}, \citenamefont {Lutz},\ and\ \citenamefont
+		{Kiesel}}]{rademacher2022nonequilibrium}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont
+			{Rademacher}}, \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Konopik}},
+		\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Debiossac}}, \bibinfo
+		{author} {\bibfnamefont {D.}~\bibnamefont {Grass}}, \bibinfo {author}
+		{\bibfnamefont {E.}~\bibnamefont {Lutz}},\ and\ \bibinfo {author}
+		{\bibfnamefont {N.}~\bibnamefont {Kiesel}},\ }\bibfield  {title} {\bibinfo
+		{title} {Nonequilibrium control of thermal and mechanical changes in a
+			levitated system},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal}
+			{Physical Review Letters}\ }\textbf {\bibinfo {volume} {128}},\ \bibinfo
+		{pages} {070601} (\bibinfo {year} {2022})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Dechant}\ \emph {et~al.}(2015)\citenamefont
+		{Dechant}, \citenamefont {Kiesel},\ and\ \citenamefont {Lutz}}]{Dechant2015}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+			{Dechant}}, \bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Kiesel}},\
+		and\ \bibinfo {author} {\bibfnamefont {E.}~\bibnamefont {Lutz}},\ }\bibfield
+	{title} {\bibinfo {title} {All-optical nanomechanical heat engine},\ }\href
+	{https://doi.org/10.1103/PhysRevLett.114.183602} {\bibfield  {journal}
+		{\bibinfo  {journal} {Phys. Rev. Lett.}\ }\textbf {\bibinfo {volume} {114}},\
+		\bibinfo {pages} {183602} (\bibinfo {year} {2015})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Debiossac}\ \emph {et~al.}(2020)\citenamefont
+		{Debiossac}, \citenamefont {Grass}, \citenamefont {Alonso}, \citenamefont
+		{Lutz},\ and\ \citenamefont {Kiesel}}]{debiossac2020thermodynamics}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont
+			{Debiossac}}, \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {Grass}},
+		\bibinfo {author} {\bibfnamefont {J.~J.}\ \bibnamefont {Alonso}}, \bibinfo
+		{author} {\bibfnamefont {E.}~\bibnamefont {Lutz}},\ and\ \bibinfo {author}
+		{\bibfnamefont {N.}~\bibnamefont {Kiesel}},\ }\bibfield  {title} {\bibinfo
+		{title} {Thermodynamics of continuous non-markovian feedback control},\
+	}\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Nature
+				communications}\ }\textbf {\bibinfo {volume} {11}},\ \bibinfo {pages} {1360}
+		(\bibinfo {year} {2020})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Brunelli}\ \emph {et~al.}(2018)\citenamefont
+		{Brunelli}, \citenamefont {Fusco}, \citenamefont {Landig}, \citenamefont
+		{Wieczorek}, \citenamefont {Hoelscher-Obermaier}, \citenamefont {Landi},
+		\citenamefont {Semi\~ao}, \citenamefont {Ferraro}, \citenamefont {Kiesel},
+		\citenamefont {Donner}, \citenamefont {De~Chiara},\ and\ \citenamefont
+		{Paternostro}}]{Brunelli2018}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont
+			{Brunelli}}, \bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Fusco}},
+		\bibinfo {author} {\bibfnamefont {R.}~\bibnamefont {Landig}}, \bibinfo
+		{author} {\bibfnamefont {W.}~\bibnamefont {Wieczorek}}, \bibinfo {author}
+		{\bibfnamefont {J.}~\bibnamefont {Hoelscher-Obermaier}}, \bibinfo {author}
+		{\bibfnamefont {G.}~\bibnamefont {Landi}}, \bibinfo {author} {\bibfnamefont
+			{F.~L.}\ \bibnamefont {Semi\~ao}}, \bibinfo {author} {\bibfnamefont
+			{A.}~\bibnamefont {Ferraro}}, \bibinfo {author} {\bibfnamefont
+			{N.}~\bibnamefont {Kiesel}}, \bibinfo {author} {\bibfnamefont
+			{T.}~\bibnamefont {Donner}}, \bibinfo {author} {\bibfnamefont
+			{G.}~\bibnamefont {De~Chiara}},\ and\ \bibinfo {author} {\bibfnamefont
+			{M.}~\bibnamefont {Paternostro}},\ }\bibfield  {title} {\bibinfo {title}
+		{Experimental determination of irreversible entropy production in
+			out-of-equilibrium mesoscopic quantum systems},\ }\href
+	{https://doi.org/10.1103/PhysRevLett.121.160604} {\bibfield  {journal}
+		{\bibinfo  {journal} {Phys. Rev. Lett.}\ }\textbf {\bibinfo {volume} {121}},\
+		\bibinfo {pages} {160604} (\bibinfo {year} {2018})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Puglisi}\ \emph {et~al.}(1999)\citenamefont
+		{Puglisi}, \citenamefont {Loreto}, \citenamefont {Marconi},\ and\
+		\citenamefont {Vulpiani}}]{puglisi1999kinetic}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+			{Puglisi}}, \bibinfo {author} {\bibfnamefont {V.}~\bibnamefont {Loreto}},
+		\bibinfo {author} {\bibfnamefont {U.~M.~B.}\ \bibnamefont {Marconi}},\ and\
+		\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Vulpiani}},\ }\bibfield
+	{title} {\bibinfo {title} {Kinetic approach to granular gases},\ }\href@noop
+	{} {\bibfield  {journal} {\bibinfo  {journal} {Physical Review E}\ }\textbf
+		{\bibinfo {volume} {59}},\ \bibinfo {pages} {5582} (\bibinfo {year}
+		{1999})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Puglisi}\ \emph {et~al.}(2002)\citenamefont
+		{Puglisi}, \citenamefont {Baldassarri},\ and\ \citenamefont
+		{Loreto}}]{puglisi2002fluctuation}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+			{Puglisi}}, \bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+			{Baldassarri}},\ and\ \bibinfo {author} {\bibfnamefont {V.}~\bibnamefont
+			{Loreto}},\ }\bibfield  {title} {\bibinfo {title} {Fluctuation-dissipation
+			relations in driven granular gases},\ }\href@noop {} {\bibfield  {journal}
+		{\bibinfo  {journal} {Physical Review E}\ }\textbf {\bibinfo {volume} {66}},\
+		\bibinfo {pages} {061305} (\bibinfo {year} {2002})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Park}\ \emph
+		{et~al.}(2016{\natexlab{b}})\citenamefont {Park}, \citenamefont {Lee},\ and\
+		\citenamefont {Noh}}]{park2016optimal}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.-M.}\ \bibnamefont
+			{Park}}, \bibinfo {author} {\bibfnamefont {J.~S.}\ \bibnamefont {Lee}},\ and\
+		\bibinfo {author} {\bibfnamefont {J.~D.}\ \bibnamefont {Noh}},\ }\bibfield
+	{title} {\bibinfo {title} {Optimal tuning of a confined brownian information
+			engine},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Physical
+				Review E}\ }\textbf {\bibinfo {volume} {93}},\ \bibinfo {pages} {032146}
+		(\bibinfo {year} {2016}{\natexlab{b}})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Gomez-Marin}\ \emph {et~al.}(2008)\citenamefont
+		{Gomez-Marin}, \citenamefont {Schmiedl},\ and\ \citenamefont
+		{Seifert}}]{gomez2008optimal}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+			{Gomez-Marin}}, \bibinfo {author} {\bibfnamefont {T.}~\bibnamefont
+			{Schmiedl}},\ and\ \bibinfo {author} {\bibfnamefont {U.}~\bibnamefont
+			{Seifert}},\ }\bibfield  {title} {\bibinfo {title} {Optimal protocols for
+			minimal work processes in underdamped stochastic thermodynamics},\
+	}\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {The Journal of
+				chemical physics}\ }\textbf {\bibinfo {volume} {129}} (\bibinfo {year}
+		{2008})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Gu{\'e}ry-Odelin}\ \emph {et~al.}(2023)\citenamefont
+		{Gu{\'e}ry-Odelin}, \citenamefont {Jarzynski}, \citenamefont {Plata},
+		\citenamefont {Prados},\ and\ \citenamefont {Trizac}}]{guery2023driving}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {D.}~\bibnamefont
+			{Gu{\'e}ry-Odelin}}, \bibinfo {author} {\bibfnamefont {C.}~\bibnamefont
+			{Jarzynski}}, \bibinfo {author} {\bibfnamefont {C.~A.}\ \bibnamefont
+			{Plata}}, \bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Prados}},\ and\
+		\bibinfo {author} {\bibfnamefont {E.}~\bibnamefont {Trizac}},\ }\bibfield
+	{title} {\bibinfo {title} {Driving rapidly while remaining in control:
+			classical shortcuts from hamiltonian to stochastic dynamics},\ }\href@noop {}
+	{\bibfield  {journal} {\bibinfo  {journal} {Reports on Progress in Physics}\
+		}\textbf {\bibinfo {volume} {86}},\ \bibinfo {pages} {035902} (\bibinfo
+		{year} {2023})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Loos}\ \emph {et~al.}(2024)\citenamefont {Loos},
+		\citenamefont {Monter}, \citenamefont {Ginot},\ and\ \citenamefont
+		{Bechinger}}]{loos2024universal}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {S.~A.}\ \bibnamefont
+			{Loos}}, \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Monter}},
+		\bibinfo {author} {\bibfnamefont {F.}~\bibnamefont {Ginot}},\ and\ \bibinfo
+		{author} {\bibfnamefont {C.}~\bibnamefont {Bechinger}},\ }\bibfield  {title}
+	{\bibinfo {title} {Universal symmetry of optimal control at the microscale},\
+	}\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Physical Review
+				X}\ }\textbf {\bibinfo {volume} {14}},\ \bibinfo {pages} {021032} (\bibinfo
+		{year} {2024})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Baldovin}\ \emph {et~al.}(2024)\citenamefont
+		{Baldovin}, \citenamefont {Yedder}, \citenamefont {Plata}, \citenamefont
+		{Raynal}, \citenamefont {Rondin}, \citenamefont {Trizac},\ and\ \citenamefont
+		{Prados}}]{baldovin2024optimal}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont
+			{Baldovin}}, \bibinfo {author} {\bibfnamefont {I.~B.}\ \bibnamefont
+			{Yedder}}, \bibinfo {author} {\bibfnamefont {C.~A.}\ \bibnamefont {Plata}},
+		\bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {Raynal}}, \bibinfo
+		{author} {\bibfnamefont {L.}~\bibnamefont {Rondin}}, \bibinfo {author}
+		{\bibfnamefont {E.}~\bibnamefont {Trizac}},\ and\ \bibinfo {author}
+		{\bibfnamefont {A.}~\bibnamefont {Prados}},\ }\bibfield  {title} {\bibinfo
+		{title} {Optimal control of levitated nanoparticles through finite-stiffness
+			confinement},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal}
+			{arXiv preprint arXiv:2408.00043}\ } (\bibinfo {year} {2024})}\BibitemShut
+	{NoStop}%
+	\bibitem [{\citenamefont {Landauer}(1961)}]{landauer1961irreversibility}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {R.}~\bibnamefont
+			{Landauer}},\ }\bibfield  {title} {\bibinfo {title} {Irreversibility and heat
+			generation in the computing process},\ }\href@noop {} {\bibfield  {journal}
+		{\bibinfo  {journal} {IBM journal of research and development}\ }\textbf
+		{\bibinfo {volume} {5}},\ \bibinfo {pages} {183} (\bibinfo {year}
+		{1961})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Bérut}\ \emph {et~al.}(2012)\citenamefont {Bérut},
+		\citenamefont {Arakelyan}, \citenamefont {Petrosyan}, \citenamefont
+		{Ciliberto}, \citenamefont {Dillenschneider},\ and\ \citenamefont
+		{Lutz}}]{berut_experimental_2012}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+			{Bérut}}, \bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Arakelyan}},
+		\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Petrosyan}}, \bibinfo
+		{author} {\bibfnamefont {S.}~\bibnamefont {Ciliberto}}, \bibinfo {author}
+		{\bibfnamefont {R.}~\bibnamefont {Dillenschneider}},\ and\ \bibinfo {author}
+		{\bibfnamefont {E.}~\bibnamefont {Lutz}},\ }\bibfield  {title} {\bibinfo
+		{title} {Experimental verification of {Landauer}’s principle linking
+			information and thermodynamics},\ }\href
+	{https://doi.org/10.1038/nature10872} {\bibfield  {journal} {\bibinfo
+			{journal} {Nature}\ }\textbf {\bibinfo {volume} {483}},\ \bibinfo {pages}
+		{187} (\bibinfo {year} {2012})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Klaers}(2019)}]{klaers_landauers_2019}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont
+			{Klaers}},\ }\bibfield  {title} {\bibinfo {title} {Landauer's {Erasure}
+			{Principle} in a {Squeezed} {Thermal} {Memory}},\ }\href
+	{https://doi.org/10.1103/PhysRevLett.122.040602} {\bibfield  {journal}
+		{\bibinfo  {journal} {Physical Review Letters}\ }\textbf {\bibinfo {volume}
+			{122}},\ \bibinfo {pages} {040602} (\bibinfo {year} {2019})},\ \bibinfo
+	{note} {publisher: American Physical Society}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Kamijima}\ \emph {et~al.}(2024)\citenamefont
+		{Kamijima}, \citenamefont {Funo},\ and\ \citenamefont
+		{Sagawa}}]{kamijima2024finite}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.}~\bibnamefont
+			{Kamijima}}, \bibinfo {author} {\bibfnamefont {K.}~\bibnamefont {Funo}},\
+		and\ \bibinfo {author} {\bibfnamefont {T.}~\bibnamefont {Sagawa}},\
+	}\bibfield  {title} {\bibinfo {title} {Finite-time thermodynamic bounds and
+			tradeoff relations for information processing},\ }\href@noop {} {\bibfield
+		{journal} {\bibinfo  {journal} {arXiv preprint arXiv:2409.08606}\ } (\bibinfo
+		{year} {2024})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Whitelam}(2023)}]{Whitelam2023}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {S.}~\bibnamefont
+			{Whitelam}},\ }\bibfield  {title} {\bibinfo {title} {Demon in the machine:
+			Learning to extract work and absorb entropy from fluctuating nanosystems},\
+	}\href {https://doi.org/10.1103/PhysRevX.13.021005} {\bibfield  {journal}
+		{\bibinfo  {journal} {Phys. Rev. X}\ }\textbf {\bibinfo {volume} {13}},\
+		\bibinfo {pages} {021005} (\bibinfo {year} {2023})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Barros}\ \emph
+		{et~al.}(2024{\natexlab{b}})\citenamefont {Barros}, \citenamefont {Whitelam},
+		\citenamefont {Ciliberto},\ and\ \citenamefont
+		{Bellon}}]{barros2024learning}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {N.}~\bibnamefont
+			{Barros}}, \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Whitelam}},
+		\bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Ciliberto}},\ and\
+		\bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Bellon}},\ }\bibfield
+	{title} {\bibinfo {title} {Learning efficient erasure protocols for an
+			underdamped memory},\ }\href@noop {} {\bibfield  {journal} {\bibinfo
+			{journal} {arXiv preprint arXiv:2409.15050}\ } (\bibinfo {year}
+		{2024}{\natexlab{b}})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Reimann}(2002)}]{reimann2002brownian}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {P.}~\bibnamefont
+			{Reimann}},\ }\bibfield  {title} {\bibinfo {title} {Brownian motors: noisy
+			transport far from equilibrium},\ }\href@noop {} {\bibfield  {journal}
+		{\bibinfo  {journal} {Physics reports}\ }\textbf {\bibinfo {volume} {361}},\
+		\bibinfo {pages} {57} (\bibinfo {year} {2002})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Fuchs}\ \emph {et~al.}(2016)\citenamefont {Fuchs},
+		\citenamefont {Goldt},\ and\ \citenamefont {Seifert}}]{fuchs2016stochastic}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont
+			{Fuchs}}, \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Goldt}},\ and\
+		\bibinfo {author} {\bibfnamefont {U.}~\bibnamefont {Seifert}},\ }\bibfield
+	{title} {\bibinfo {title} {Stochastic thermodynamics of resetting},\
+	}\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Europhysics
+				Letters}\ }\textbf {\bibinfo {volume} {113}},\ \bibinfo {pages} {60009}
+		(\bibinfo {year} {2016})}\BibitemShut {NoStop}%
+	\bibitem [{\citenamefont {Goerlich}\ \emph {et~al.}(2023)\citenamefont
+		{Goerlich}, \citenamefont {Li}, \citenamefont {Pires}, \citenamefont
+		{Hervieux}, \citenamefont {Manfredi},\ and\ \citenamefont
+		{Genet}}]{goerlich2023experimental}%
+	\BibitemOpen
+	\bibfield  {author} {\bibinfo {author} {\bibfnamefont {R.}~\bibnamefont
+			{Goerlich}}, \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Li}},
+		\bibinfo {author} {\bibfnamefont {L.~B.}\ \bibnamefont {Pires}}, \bibinfo
+		{author} {\bibfnamefont {P.-A.}\ \bibnamefont {Hervieux}}, \bibinfo {author}
+		{\bibfnamefont {G.}~\bibnamefont {Manfredi}},\ and\ \bibinfo {author}
+		{\bibfnamefont {C.}~\bibnamefont {Genet}},\ }\bibfield  {title} {\bibinfo
+		{title} {Experimental test of landauer's principle for stochastic
+			resetting},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {arXiv
+				preprint arXiv:2306.09503}\ } (\bibinfo {year} {2023})}\BibitemShut {NoStop}%
+\end{thebibliography}%
+
+\end{document}
